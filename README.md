@@ -1,0 +1,66 @@
+# my_yard
+
+## Table of Contents
+* [Description](#description)
+* [Communication Flow](#communication-flow)
+
+## Description
+
+
+`my_yard` is a Flutter-based mobile application designed to interface with ESP32 microcontrollers. The primary goal of this application is to provide a user-friendly interface for controlling various smart devices and systems deployed around a yard or outdoor space.
+
+Communication with the ESP32 devices is established over HTTP, allowing for straightforward and widely supported network interactions. Users can send commands from the app to the ESP32s, which in turn can manage connected hardware.
+
+### Key Features & Purpose:
+*   **Remote Control:** Enables users to remotely operate ESP32-controlled systems.
+*   **ESP32 Integration:** Specifically built to communicate with ESP32 devices, leveraging their capabilities for IoT projects.
+*   **HTTP Communication:** Utilizes standard HTTP protocols for sending commands and receiving status updates.
+*   **Yard Automation:** Aims to simplify the management of outdoor utilities and amenities, such as:
+    *   Lighting: Garden lights, pathway illumination, decorative lighting.
+    *   Water Management: Irrigation systems, sprinkler zones, water pumps.
+    *   Access Control: Automated gates, garage doors.
+    *   Pool & Spa: Pump controls, heater activation.
+*   **Home Automation:** Extends control to indoor devices and systems, including:
+    *   **Lighting Control:** Managing smart bulbs, switches, or LED strips connected via ESP32.
+    *   **Appliance Control:** Managing smart plugs or directly interfaced appliances.
+    *   **Environmental Monitoring:** Tracking indoor air quality (VOC, CO2), temperature, and humidity via ESP32 sensors. The ESP32 can store historical sensor data in an array.
+    *   **Sensor Data Retrieval & Display:** The app can query the ESP32 to retrieve stored sensor data and display it to the user, for example, in charts or tables.
+    *   **Fridge Monitoring:** Potentially tracking temperature, door status, or inventory if integrated with ESP32 sensors.
+    *   **Shopping List Display:** Interfacing with an ESP32 connected to a small display to show shopping lists or other household information.
+
+Essentially, if an ESP32 can be programmed to switch a relay, read a sensor, or send a signal to control a device in or around your home and yard, this application aims to provide the mobile interface to manage it.
+
+This project serves as a practical application of Flutter for IoT device control, demonstrating how a mobile frontend can effectively manage hardware through network communication.
+
+[Back to Top](#my_yard)
+
+## Communication Flow
+
+
+The application communicates with ESP32 devices over the local network using the HTTP protocol. The typical flow is as follows:
+
+1.  The Flutter app (running on a mobile device) sends an HTTP request.
+2.  The request travels over the local Wi-Fi network. This can be a command (e.g., turn on light) or a data query (e.g., fetch historical sensor data).
+3.  The ESP32, connected to the same local network, receives the HTTP request.
+4.  The ESP32 processes the request. This could involve toggling a relay, reading a current sensor value, or retrieving stored historical data from its internal array.
+5.  The ESP32 sends an HTTP response back to the app. This response will contain status information (e.g., command success/failure) or the requested data (e.g., current sensor reading or an array of historical data points).
+
+
+```mermaid
+sequenceDiagram
+ User->>FlutterApp: Initiates Action (e.g., tap button to turn on light)
+    FlutterApp->>ESP32Device: Sends HTTP Command Request (e.g., /light?state=on)
+    activate ESP32Device
+    ESP32Device-->>FlutterApp: Sends HTTP Command Response (e.g., {status: "ok"})
+    deactivate ESP32Device
+    FlutterApp-->>User: Updates UI with command result
+
+    User->>FlutterApp: Requests Sensor Data History
+    FlutterApp->>ESP32Device: Sends HTTP Query Request (e.g., /sensor-data)
+    activate ESP32Device
+    ESP32Device-->>FlutterApp: Sends HTTP Response with Sensor Data (e.g., [{temp:25, time:1000}, ...])
+    deactivate ESP32Device
+    FlutterApp-->>User: Displays Sensor Data (e.g., in a chart)
+```
+
+Back to Top
