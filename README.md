@@ -96,26 +96,3 @@ We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting 
 2.  **Open an Issue:** If not, open a new issue, clearly describing the feature you'd like to see, why it would be useful, and any potential implementation ideas.
 
 [Back to Top](#my_yard)
-
-### Reporting a Bug
-
-
-A clear and descriptive title.
-Steps to reproduce the bug.
-What you expected to happen.
-What actually happened (including any error messages or screenshots).
-Your environment (e.g., Flutter version, device OS, app version).
-### Submitting Pull Requests (PRs)
- 1. Fork the Repository: Fork the project repository to your own account.
- 2. Create a Branch: Create a new branch in your fork for your changes (e.g., fix/button-bug or feature/new-sensor-display). 3. Make Changes: Implement your fix or feature.
- 4. Test Your Changes: Ensure your changes work as expected and don't break existing functionality. 
- 5. Commit Your Changes: Write clear and concise commit messages.
- 6. Submit a Pull Request: Push your branch to your fork and open a pull request to the main repository. Provide a clear description of your changes in the PR.
- 
-[Back to Top](#my_yard)
-
-  ### Requesting Features
-  1. Check Existing Requests: Look through the existing issues/feature requests to see if your idea has already been suggested.
-  2. Open an Issue: If not, open a new issue, clearly describing the feature you'd like to see, why it would be useful, and any potential implementation ideas.
-  
-  [Back to Top](#my_yard)
