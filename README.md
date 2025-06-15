@@ -63,4 +63,4 @@ sequenceDiagram
     FlutterApp-->>User: Displays Sensor Data (e.g., in a chart)
 ```
 
-Back to Top
+[Back to Top](#my_yard)
