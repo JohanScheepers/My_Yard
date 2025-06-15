@@ -24,6 +24,8 @@ This project utilizes the following hardware components, broken down by sub-syst
     *   Self Latching Solenoid Valves (for controlling multiple irrigation zones, typically one per zone, controlled via additional relays)
     *   (Optional) Water Level Sensor (e.g., float switch, for tank level monitoring)
 
+[Back to Top](#readme-for-my_irrigation_project)
+
 ### Soil Moisture Sensor System
 *   **Microcontroller:** ESP32
 *   **Power Source:**
@@ -36,6 +38,8 @@ This project utilizes the following hardware components, broken down by sub-syst
     *   Temperature Sensor (for soil/ambient temperature)
     *   (Optional) Electrical Conductivity (EC) / Salinity Sensor (for soil nutrient/salt level)
      *   (Optional) Leaf Wetness Sensor (to detect moisture on foliage)
+
+[Back to Top](#readme-for-my_irrigation_project)
 
 ### Weather Station
 *   **Microcontroller:** ESP32
