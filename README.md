@@ -3,6 +3,7 @@
 ## Table of Contents
 * [Description](#description)
 * [Communication Flow](#communication-flow)
+* [Data Storage](#data-storage)
 * [Contributing](#contributing)
 
 ## Description
@@ -63,6 +64,21 @@ sequenceDiagram
     deactivate ESP32Device
     FlutterApp-->>User: Displays Sensor Data (e.g., in a chart)
 ```
+
+## Data Storage
+
+Sensor readings and relevant event data are primarily stored directly on the ESP32 microcontroller. This approach allows each ESP32 device to maintain its own operational history. 
+
+* On-Device Storage: The ESP32 utilizes its available memory (e.g., SPIFFS or LittleFS on flash, or RAM for temporary buffers) to store data.
+* JSON Format: Data is typically stored in a JSON format on the ESP32. This allows for structured and easily parsable data.
+* Historical Data Retrieval: When the Flutter application needs to display historical data (e.g., sensor trends over time), it sends a specific query request to the relevant ESP32. The ESP32 then retrieves the data from its local storage and sends it back to the application, usually as a JSON response.
+* Storage Duration: The duration for which historical data can be stored on an ESP32 (e.g., a week, a month, or longer) is dependent on several factors:
+
+    * The amount of available memory on the specific ESP32 model.
+    * The frequency of data logging (e.g., every minute, every 5 minutes, hourly).
+    * The size of each data record.
+    * The number of different sensors or data points being logged.
+    * Implementations may use strategies like circular buffers or data aggregation to manage storage within the ESP32's memory constraints.
 
 ## Contributing
 
