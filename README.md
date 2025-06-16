@@ -4,6 +4,7 @@
 * [Description](#description)
 * [Communication Flow](#communication-flow)
 * [Data Storage](#data-storage)
+* [Other Project Documentation](#other-project-documentation)
 * [Contributing](#contributing)
 
 
@@ -82,6 +83,17 @@ Sensor readings and relevant event data are primarily stored directly on the ESP
     * The size of each data record.
     * The number of different sensors or data points being logged.
     * Implementations may use strategies like circular buffers or data aggregation to manage storage within the ESP32's memory constraints.
+
+[Back to Top](#my_yard)
+
+
+## Other Project Documentation
+
+This section provides links to other relevant README files within the `my_yard` project, offering more detailed information on specific components or aspects.
+
+*   **My Appliance Project (my_appliance/README.md):**
+    *   Details the hardware components used for controlling an appliance, including the ESP32 micro-controller, power source (solar panel, solar charge controller, battery), 3D printed enclosure, and a relay.
+
 
 [Back to Top](#my_yard)
 
