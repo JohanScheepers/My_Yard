@@ -11,7 +11,7 @@
 This project utilizes the following hardware components, broken down by sub-system, for the irrigation system:
 
 ### Pump Controller
-*   **Microcontroller:** ESP32
+*   **Micro-controller:** ESP32
 *   **Power Source:**
     *   Solar Panel
     *   Solar Charge Controller

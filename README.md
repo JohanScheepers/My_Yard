@@ -6,10 +6,10 @@
 * [Data Storage](#data-storage)
 * [Contributing](#contributing)
 
+
 ## Description
 
-
-`my_yard` is a Flutter-based mobile application designed to interface with ESP32 microcontrollers. The primary goal of this application is to provide a user-friendly interface for controlling various smart devices and systems deployed around a yard or outdoor space.
+`my_yard` is a Flutter-based mobile application designed to interface with ESP32 micro-controllers. The primary goal of this application is to provide a user-friendly interface for controlling various smart devices and systems deployed around a yard or outdoor space.
 
 Communication with the ESP32 devices is established over HTTP, allowing for straightforward and widely supported network interactions. Users can send commands from the app to the ESP32s, which in turn can manage connected hardware.
 
@@ -36,8 +36,8 @@ This project serves as a practical application of Flutter for IoT device control
 
 [Back to Top](#my_yard)
 
-## Communication Flow
 
+## Communication Flow
 
 The application communicates with ESP32 devices over the local network using the HTTP protocol. The typical flow is as follows:
 
@@ -65,9 +65,12 @@ sequenceDiagram
     FlutterApp-->>User: Displays Sensor Data (e.g., in a chart)
 ```
 
+[Back to Top](#my_yard)
+
+
 ## Data Storage
 
-Sensor readings and relevant event data are primarily stored directly on the ESP32 microcontroller. This approach allows each ESP32 device to maintain its own operational history. 
+Sensor readings and relevant event data are primarily stored directly on the ESP32 micro-controller. This approach allows each ESP32 device to maintain its own operational history. 
 
 * On-Device Storage: The ESP32 utilizes its available memory (e.g., SPIFFS or LittleFS on flash, or RAM for temporary buffers) to store data.
 * JSON Format: Data is typically stored in a JSON format on the ESP32. This allows for structured and easily parsable data.
@@ -80,11 +83,12 @@ Sensor readings and relevant event data are primarily stored directly on the ESP
     * The number of different sensors or data points being logged.
     * Implementations may use strategies like circular buffers or data aggregation to manage storage within the ESP32's memory constraints.
 
+[Back to Top](#my_yard)
+
+
 ## Contributing
 
 We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting a fix, or proposing a new feature, your help is appreciated.
-
-[Back to Top](#my_yard)
 
 ### Reporting Bugs
 1.  **Check Existing Issues:** Before submitting a new bug, please check the existing issues on our issue tracker (e.g., GitHub Issues) to see if the bug has already been reported.
@@ -95,8 +99,6 @@ We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting 
     *   What actually happened (including any error messages or screenshots).
     *   Your environment (e.g., Flutter version, device OS, app version).
 
-[Back to Top](#my_yard)
-
 ### Submitting Pull Requests (PRs)
 1.  **Fork the Repository:** Fork the project repository to your own account.
 2.  **Create a Branch:** Create a new branch in your fork for your changes (e.g., `fix/button-bug` or `feature/new-sensor-display`).
@@ -104,8 +106,6 @@ We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting 
 4.  **Test Your Changes:** Ensure your changes work as expected and don't break existing functionality.
 5.  **Commit Your Changes:** Write clear and concise commit messages.
 6.  **Submit a Pull Request:** Push your branch to your fork and open a pull request to the main repository. Provide a clear description of your changes in the PR.
-
-[Back to Top](#my_yard)
 
 ### Requesting Features
 1.  **Check Existing Requests:** Look through the existing issues/feature requests to see if your idea has already been suggested.

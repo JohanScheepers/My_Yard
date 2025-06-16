@@ -7,7 +7,7 @@
 
 This project utilizes the following hardware components for the automated gate and garage door system:
 
-*   **Microcontroller:** ESP32
+*   **Micro-controller:** ESP32
 *   **Power Source:**
     *   Solar Panel
     *   Solar Charge Controller

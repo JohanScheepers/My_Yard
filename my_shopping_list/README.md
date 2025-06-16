@@ -7,7 +7,7 @@
 
 This project utilizes the following hardware components:
 
-*   **Microcontroller:** ESP32
+*   **Micro-controller:** ESP32
 *   **Power Source:**
     *   Solar Panel
     *   Solar Charge Controller
