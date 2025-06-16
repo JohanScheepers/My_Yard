@@ -168,148 +168,22 @@ When the Flutter application requests historical sensor data using the "Sensor D
 ```json
 {
   "query_response": {
-                    "request_details": {
-                        "sensors_queried_ids": [
-                                                "water_temp_celsius",
-                                                "air_temp_celsius",
-                                                "water_flow_lpm",
-                                                "ph_value",
-                                                "water_level_status",
-                                                "ec_tds_ppm",
-                                                "ambient_light_lux"
-                                            ],
-                         "time_period": {
-                                        "start_timestamp_utc": "2025-06-14T00:00:00Z",
-                                          "end_timestamp_utc": "2025-06-14T01:00:00Z" // Adjusted for a 1-hour example
-                                        },
-                                            },
-    "data": [
-                {
-                    "sensor_id": "water_temp_celsius",
-                    "values": [
-                        {"timestamp": "2025-06-14T00:00:00Z", "value": 25.0},
-                    {"timestamp": "2025-06-14T00:05:00Z", "value": 25.1},
-                    {"timestamp": "2025-06-14T00:10:00Z", "value": 25.0},
-                    {"timestamp": "2025-06-14T00:15:00Z", "value": 25.1},
-                    {"timestamp": "2025-06-14T00:20:00Z", "value": 25.2},
-                    {"timestamp": "2025-06-14T00:25:00Z", "value": 25.1},
-                    {"timestamp": "2025-06-14T00:30:00Z", "value": 25.0},
-                    {"timestamp": "2025-06-14T00:35:00Z", "value": 25.1},
-                    {"timestamp": "2025-06-14T00:40:00Z", "value": 25.2},
-                    {"timestamp": "2025-06-14T00:45:00Z", "value": 25.2},
-                    {"timestamp": "2025-06-14T00:50:00Z", "value": 25.3},
-                    {"timestamp": "2025-06-14T00:55:00Z", "value": 25.2},
-                    {"timestamp": "2025-06-14T01:00:00Z", "value": 25.3}
-                    ]
-                },
-                {
-                    "sensor_id": "ph_value",
-                    "values": [
-                        {"timestamp": "2025-06-14T00:00:00Z", "value": 6.8},
-                    {"timestamp": "2025-06-14T00:05:00Z", "value": 6.9},
-                    {"timestamp": "2025-06-14T00:10:00Z", "value": 6.8},
-                    {"timestamp": "2025-06-14T00:15:00Z", "value": 6.9},
-                    {"timestamp": "2025-06-14T00:20:00Z", "value": 7.0},
-                    {"timestamp": "2025-06-14T00:25:00Z", "value": 6.9},
-                    {"timestamp": "2025-06-14T00:30:00Z", "value": 6.8},
-                    {"timestamp": "2025-06-14T00:35:00Z", "value": 6.9},
-                    {"timestamp": "2025-06-14T00:40:00Z", "value": 7.0},
-                    {"timestamp": "2025-06-14T00:45:00Z", "value": 7.0},
-                    {"timestamp": "2025-06-14T00:50:00Z", "value": 7.1},
-                    {"timestamp": "2025-06-14T00:55:00Z", "value": 7.0},
-                    {"timestamp": "2025-06-14T01:00:00Z", "value": 7.1}
-                    ]
-                },
-                {
-                    "sensor_id": "air_temp_celsius",
-                    "values": [
-                    {"timestamp": "2025-06-14T00:00:00Z", "value": 26.5},
-                    {"timestamp": "2025-06-14T00:05:00Z", "value": 26.6},
-                    {"timestamp": "2025-06-14T00:10:00Z", "value": 26.5},
-                    {"timestamp": "2025-06-14T00:15:00Z", "value": 26.6},
-                    {"timestamp": "2025-06-14T00:20:00Z", "value": 26.7},
-                    {"timestamp": "2025-06-14T00:25:00Z", "value": 26.6},
-                    {"timestamp": "2025-06-14T00:30:00Z", "value": 26.5},
-                    {"timestamp": "2025-06-14T00:35:00Z", "value": 26.6},
-                    {"timestamp": "2025-06-14T00:40:00Z", "value": 26.7},
-                    {"timestamp": "2025-06-14T00:45:00Z", "value": 26.7},
-                    {"timestamp": "2025-06-14T00:50:00Z", "value": 26.8},
-                    {"timestamp": "2025-06-14T00:55:00Z", "value": 26.7},
-                    {"timestamp": "2025-06-14T01:00:00Z", "value": 26.8}
-                    ]
-                },
-                {
-                    "sensor_id": "water_flow_lpm",
-                    "values": [
-                    {"timestamp": "2025-06-14T00:00:00Z", "value": 5.0},
-                    {"timestamp": "2025-06-14T00:05:00Z", "value": 5.1},
-                    {"timestamp": "2025-06-14T00:10:00Z", "value": 5.0},
-                    {"timestamp": "2025-06-14T00:15:00Z", "value": 4.9},
-                    {"timestamp": "2025-06-14T00:20:00Z", "value": 5.0},
-                    {"timestamp": "2025-06-14T00:25:00Z", "value": 5.1},
-                    {"timestamp": "2025-06-14T00:30:00Z", "value": 5.0},
-                    {"timestamp": "2025-06-14T00:35:00Z", "value": 4.9},
-                    {"timestamp": "2025-06-14T00:40:00Z", "value": 5.0},
-                    {"timestamp": "2025-06-14T00:45:00Z", "value": 5.1},
-                    {"timestamp": "2025-06-14T00:50:00Z", "value": 5.0},
-                    {"timestamp": "2025-06-14T00:55:00Z", "value": 4.9},
-                    {"timestamp": "2025-06-14T01:00:00Z", "value": 5.0}
-                    ]
-                },
-                {
-                    "sensor_id": "water_level_status",
-                    "values": [
-                    {"timestamp": "2025-06-14T00:00:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:05:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:10:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:15:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:20:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:25:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:30:00Z", "value": "LOW"}, // Example change
-                    {"timestamp": "2025-06-14T00:35:00Z", "value": "LOW"},
-                    {"timestamp": "2025-06-14T00:40:00Z", "value": "OK"}, // Example change back
-                    {"timestamp": "2025-06-14T00:45:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:50:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T00:55:00Z", "value": "OK"},
-                    {"timestamp": "2025-06-14T01:00:00Z", "value": "OK"}
-                    ]
-                },
-                {
-                    "sensor_id": "ec_tds_ppm",
-                    "values": [
-                    {"timestamp": "2025-06-14T00:00:00Z", "value": 340},
-                    {"timestamp": "2025-06-14T00:05:00Z", "value": 342},
-                    {"timestamp": "2025-06-14T00:10:00Z", "value": 341},
-                    {"timestamp": "2025-06-14T00:15:00Z", "value": 343},
-                    {"timestamp": "2025-06-14T00:20:00Z", "value": 345},
-                    {"timestamp": "2025-06-14T00:25:00Z", "value": 344},
-                    {"timestamp": "2025-06-14T00:30:00Z", "value": 346},
-                    {"timestamp": "2025-06-14T00:35:00Z", "value": 345},
-                    {"timestamp": "2025-06-14T00:40:00Z", "value": 347},
-                    {"timestamp": "2025-06-14T00:45:00Z", "value": 348},
-                    {"timestamp": "2025-06-14T00:50:00Z", "value": 350},
-                    {"timestamp": "2025-06-14T00:55:00Z", "value": 349},
-                    {"timestamp": "2025-06-14T01:00:00Z", "value": 351}
-                    ]
-                },
-                {
-                    "sensor_id": "ambient_light_lux",
-                    "values": [
-                    {"timestamp": "2025-06-14T00:00:00Z", "value": 10}, // Assuming night time
-                    {"timestamp": "2025-06-14T00:05:00Z", "value": 10},
-                    {"timestamp": "2025-06-14T00:10:00Z", "value": 11},
-                    {"timestamp": "2025-06-14T00:15:00Z", "value": 10},
-                    {"timestamp": "2025-06-14T00:20:00Z", "value": 11},
-                    {"timestamp": "2025-06-14T00:25:00Z", "value": 12},
-                    {"timestamp": "2025-06-14T00:30:00Z", "value": 10},
-                    {"timestamp": "2025-06-14T00:35:00Z", "value": 11},
-                    {"timestamp": "2025-06-14T00:40:00Z", "value": 12},
-                    {"timestamp": "2025-06-14T00:45:00Z", "value": 11},
-                    {"timestamp": "2025-06-14T00:50:00Z", "value": 10},
-                    {"timestamp": "2025-06-14T00:55:00Z", "value": 12},
-                    {"timestamp": "2025-06-14T01:00:00Z", "value": 10}
-                    ]
-                }
+    "data": [                         
+              "values": [
+                        {"timestamp": "2025-06-14T00:00:00Z", "water_temp_celsius": 25.0, "ec_tds_ppm": 340, "water_level_status": "OK", "water_flow_lpm": 5.0, "air_temp_celsius": 26.5, "ph_value": 6.8,"ambient_light_lux": 10},
+                        {"timestamp": "2025-06-14T00:05:00Z", "water_temp_celsius": 25.1, "ec_tds_ppm": 342, "water_level_status": "OK", "water_flow_lpm": 5.1, "air_temp_celsius": 26.6, "ph_value": 6.9,"ambient_light_lux": 10},
+                        {"timestamp": "2025-06-14T00:10:00Z", "water_temp_celsius": 25.0, "ec_tds_ppm": 341, "water_level_status": "OK", "water_flow_lpm": 5.0, "air_temp_celsius": 26.5, "ph_value": 6.8,"ambient_light_lux": 11},
+                        {"timestamp": "2025-06-14T00:15:00Z", "water_temp_celsius": 25.1, "ec_tds_ppm": 343, "water_level_status": "OK", "water_flow_lpm": 4.9, "air_temp_celsius": 26.6, "ph_value": 6.9,"ambient_light_lux": 10},
+                        {"timestamp": "2025-06-14T00:20:00Z", "water_temp_celsius": 25.2, "ec_tds_ppm": 345, "water_level_status": "OK", "water_flow_lpm": 5.0, "air_temp_celsius": 26.7, "ph_value": 7.0,"ambient_light_lux": 11},
+                        {"timestamp": "2025-06-14T00:25:00Z", "water_temp_celsius": 25.1, "ec_tds_ppm": 344, "water_level_status": "OK", "water_flow_lpm": 5.1, "air_temp_celsius": 26.6, "ph_value": 6.9,"ambient_light_lux": 12},
+                        {"timestamp": "2025-06-14T00:30:00Z", "water_temp_celsius": 25.0, "ec_tds_ppm": 346, "water_level_status": "LOW", "water_flow_lpm": 5.0, "air_temp_celsius": 26.5, "ph_value": 6.8,"ambient_light_lux": 10},
+                        {"timestamp": "2025-06-14T00:35:00Z", "water_temp_celsius": 25.1, "ec_tds_ppm": 345, "water_level_status": "LOW", "water_flow_lpm": 4.9, "air_temp_celsius": 26.6, "ph_value": 6.9,"ambient_light_lux": 11},
+                        {"timestamp": "2025-06-14T00:40:00Z", "water_temp_celsius": 25.2, "ec_tds_ppm": 347, "water_level_status": "OK", "water_flow_lpm": 5.0, "air_temp_celsius": 26.7, "ph_value": 7.0,"ambient_light_lux": 12},
+                        {"timestamp": "2025-06-14T00:45:00Z", "water_temp_celsius": 25.2, "ec_tds_ppm": 348, "water_level_status": "OK", "water_flow_lpm": 5.1, "air_temp_celsius": 26.7, "ph_value": 7.0,"ambient_light_lux": 11},
+                        {"timestamp": "2025-06-14T00:50:00Z", "water_temp_celsius": 25.3, "ec_tds_ppm": 350, "water_level_status": "OK", "water_flow_lpm": 5.0, "air_temp_celsius": 26.8, "ph_value": 7.1,"ambient_light_lux": 10},
+                        {"timestamp": "2025-06-14T00:55:00Z", "water_temp_celsius": 25.2, "ec_tds_ppm": 349, "water_level_status": "OK", "water_flow_lpm": 4.9, "air_temp_celsius": 26.7, "ph_value": 7.0,"ambient_light_lux": 12},
+                        {"timestamp": "2025-06-14T01:00:00Z", "water_temp_celsius": 25.3, "ec_tds_ppm": 351, "water_level_status": "OK", "water_flow_lpm": 5.0, "air_temp_celsius": 26.8, "ph_value": 7.1,"ambient_light_lux": 10}
+                          ]
             ],
                 },
     
