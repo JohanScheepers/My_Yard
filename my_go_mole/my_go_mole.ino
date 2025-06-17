@@ -15,6 +15,7 @@
 // --- Configuration ---
 const char *ssid = "YOUR_WIFI_SSID";
 const char *password = "YOUR_WIFI_PASSWORD";
+const char *esp_hostname = "my-go-mole"; // Define your desired hostname here
 
 // Transducer Configuration
 const int transducerPin = 25;       // GPIO pin for the transducer
@@ -60,6 +61,10 @@ void setup()
 
     // --- Connect to Wi-Fi ---
     Serial.print("Connecting to Wi-Fi: ");
+    Serial.println(ssid);
+    WiFi.setHostname(esp_hostname); // Set the hostname before connecting
+    Serial.print("Setting hostname to: ");
+    Serial.println(esp_hostname);
     Serial.println(ssid);
     WiFi.begin(ssid, password);
     int wifiConnectAttempts = 0;

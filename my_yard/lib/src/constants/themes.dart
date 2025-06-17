@@ -31,7 +31,7 @@ class AppThemes {
   ///
   /// If the platform is not iOS, returns null.
   static CupertinoThemeData? getPlatformSpecificCupertinoTheme(BuildContext context) {
-    if (PlatformInfo.isIOS) {
+    if (OperatingSys.isIOS) {
       final Brightness currentBrightness = Theme.of(context).brightness;
       final ColorScheme materialColorScheme =
           currentBrightness == Brightness.light

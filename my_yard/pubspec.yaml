@@ -12,11 +12,14 @@ dependencies:
   cupertino_icons: ^1.0.8 # Added cupertino_icons
   go_router: ^15.2.0
   shared_preferences: ^2.5.3
+  network_info_plus: ^5.0.3
+  dart_ping: ^8.0.0 # Replaced ping_discover_network
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
@@ -24,3 +27,11 @@ flutter:
   assets:
      - assets/
      - assets/logo/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/my_yard_name.png" # Path to your master icon
+  #min_sdk_android: 21 # Optional: For adaptive icons
+  # adaptive_icon_background: "#ffffff" # Optional: For adaptive icons
+  # adaptive_icon_foreground: "assets/logo/my_icon_foreground.png" # Optional: For adaptive icons

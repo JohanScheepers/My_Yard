@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 /// A utility class to determine the current operating system.
 ///
 /// Provides boolean flags for common platforms and the operating system name.
-class PlatformInfo {
-  const PlatformInfo._(); // Private constructor to prevent instantiation
+class OperatingSys {
+
 
   /// Returns the name of the operating system.
   ///
