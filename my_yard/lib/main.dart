@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart'; // For CupertinoTheme and CupertinoThemeData
 import 'package:my_yard/src/routing/app_router.dart';
@@ -31,35 +30,14 @@ class _MainAppState extends State<MainApp> {
           return const SizedBox.shrink();
         }
 
-        final String currentOS = Platform.operatingSystem;
+        final cupertinoTheme = AppThemes.getPlatformSpecificCupertinoTheme(context);
 
-        switch (currentOS) {
-          case 'ios':
-            // Apply Cupertino specific theme for Cupertino widgets when on iOS.
-            // Determine the current brightness to match Material theme.
-            final Brightness currentBrightness = Theme.of(context).brightness;
-            final ColorScheme materialColorScheme =
-                currentBrightness == Brightness.light
-                    ? AppThemes.lightTheme.colorScheme
-                    : AppThemes.darkTheme.colorScheme;
-
-            return CupertinoTheme(
-              data: CupertinoThemeData(
-                brightness: currentBrightness,
-                primaryColor: materialColorScheme.primary,
-                // You can further customize other CupertinoThemeData properties here,
-                // e.g., barBackgroundColor, scaffoldBackgroundColor, etc.
-              ),
-              child: child,
-            );
-          case 'android':
-            // Android uses the Material theme by default, which is already set up.
-            // Return child directly.
-            return child;
-          default:
-            // For other platforms, return the child directly.
-            return child;
+        if (cupertinoTheme != null) {
+          return CupertinoTheme(data: cupertinoTheme, child: child);
         }
+        // For non-iOS platforms or if no specific Cupertino theme is needed,
+        // return the child directly.
+        return child;
       },
     );
   }
