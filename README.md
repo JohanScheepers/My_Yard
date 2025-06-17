@@ -1,5 +1,8 @@
 <a id="my-yard-logo-anchor"></a>
-![My Yard Logo](./my_yard/assets/my_yard_with_app_name.png)
+
+
+![My Yard Logo](./my_yard/assets/logo/my_yard_name_512.png)
+
 
 ## Table of Contents
 * [Description](#description)
