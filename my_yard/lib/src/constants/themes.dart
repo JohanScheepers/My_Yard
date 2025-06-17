@@ -9,8 +9,8 @@ class AppThemes {
     useMaterial3: true,
     colorScheme: kLightColorScheme,
     textTheme: kAppTextTheme.apply(
-      bodyColor: kLightColorScheme.onBackground,
-      displayColor: kLightColorScheme.onBackground,
+      bodyColor: kLightColorScheme.onSurface,
+      displayColor: kLightColorScheme.onSurface,
     ),
     // Add other theme properties like appBarTheme, buttonTheme, etc.
     // e.g. appBarTheme: AppBarTheme(backgroundColor: kLightColorScheme.primaryContainer)
@@ -20,8 +20,8 @@ class AppThemes {
     useMaterial3: true,
     colorScheme: kDarkColorScheme,
     textTheme: kAppTextTheme.apply(
-      bodyColor: kDarkColorScheme.onBackground,
-      displayColor: kDarkColorScheme.onBackground,
+      bodyColor: kDarkColorScheme.onSurface,
+      displayColor: kDarkColorScheme.onSurface,
     ),
     // Add other theme properties for dark theme
     // e.g. appBarTheme: AppBarTheme(backgroundColor: kDarkColorScheme.primaryContainer)

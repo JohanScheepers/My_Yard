@@ -1,15 +1,14 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/cupertino.dart'; // For Cupertino widgets
 import 'package:flutter/material.dart';
 import 'package:my_yard/src/constants/ui_constants.dart';
+import 'package:my_yard/src/utils/platform_info.dart'; // For PlatformInfo
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool isIOS = Platform.isIOS;
+    final bool isIOS = PlatformInfo.isIOS;
 
     // Define a breakpoint for wide layouts
     const double wideLayoutBreakpoint = 600.0;
@@ -36,8 +35,8 @@ class HomeScreen extends StatelessWidget {
                 // iOS specific action
                 debugPrint('iOS Action Tapped');
               },
-              child:
-                  Text(useHorizontalLayout ? 'iOS Action (Wide)' : 'iOS Action'),
+              child: Text(
+                  useHorizontalLayout ? 'iOS Action (Wide)' : 'iOS Action'),
             )
           : ElevatedButton(
               onPressed: () {
@@ -93,9 +92,12 @@ class HomeScreen extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final String platformTitle = isIOS ? 'iOS' : 'Android';
+        final String platformTitle =
+            isIOS ? 'iOS' : 'Android';
         final String sizeIndicator =
-            constraints.maxWidth >= wideLayoutBreakpoint ? "(Wide)" : "(Narrow)";
+            constraints.maxWidth >= wideLayoutBreakpoint
+                ? "(Wide)"
+                : "(Narrow)";
         final String appBarTitle = 'My Yard - $platformTitle $sizeIndicator';
 
         if (isIOS) {

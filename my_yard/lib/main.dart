@@ -24,21 +24,7 @@ class _MainAppState extends State<MainApp> {
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
       themeMode: ThemeMode.system, // Or ThemeMode.light, ThemeMode.dark
-      builder: (context, child) {
-        // Ensure child is not null, which should be handled by GoRouter.
-        if (child == null) {
-          return const SizedBox.shrink();
-        }
-
-        final cupertinoTheme = AppThemes.getPlatformSpecificCupertinoTheme(context);
-
-        if (cupertinoTheme != null) {
-          return CupertinoTheme(data: cupertinoTheme, child: child);
-        }
-        // For non-iOS platforms or if no specific Cupertino theme is needed,
-        // return the child directly.
-        return child;
-      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }

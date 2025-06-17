@@ -5,7 +5,7 @@ import 'package:my_yard/src/routing/app_router.dart'; // For AppRoute.home
 import 'package:my_yard/src/constants/ui_constants.dart';
 
 // Asset path constant
-const String kLogoPath = 'assets/logo/my_yard_with_app_name.png';
+const String kLogoPath = 'assets/logo/my_yard_name_256.png';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToHome() async {
     // Wait for a few seconds to display the splash screen
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 5));
     if (mounted) {
       // Navigate to the home screen using named route
       context.goNamed(AppRoute.home);
