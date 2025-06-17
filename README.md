@@ -1,4 +1,5 @@
-# my_yard
+<a id="my-yard-logo-anchor"></a>
+![My Yard Logo](./my_yard/assets/my_yard_with_app_name.png)
 
 ## Table of Contents
 * [Description](#description)
@@ -35,7 +36,7 @@ Essentially, if an ESP32 can be programmed to switch a relay, read a sensor, or 
 
 This project serves as a practical application of Flutter for IoT device control, demonstrating how a mobile frontend can effectively manage hardware through network communication.
 
-[Back to Top](#my_yard)
+[Back to Top](#my-yard-logo-anchor)
 
 
 ## Communication Flow
@@ -66,7 +67,7 @@ sequenceDiagram
     FlutterApp-->>User: Displays Sensor Data (e.g., in a chart)
 ```
 
-[Back to Top](#my_yard)
+[Back to Top](#my-yard-logo-anchor)
 
 
 ## Data Storage
@@ -84,7 +85,7 @@ Sensor readings and relevant event data are primarily stored directly on the ESP
     * The number of different sensors or data points being logged.
     * Implementations may use strategies like circular buffers or data aggregation to manage storage within the ESP32's memory constraints.
 
-[Back to Top](#my_yard)
+[Back to Top](#my-yard-logo-anchor)
 
 
 ## Other Project Documentation
@@ -119,7 +120,7 @@ This section provides links to other relevant README files within the `my_yard` 
 *   **[My Shopping List Project](my_shopping_list/README.md):**
    *   Details for the `my_shopping_list` sub-project, which could involve an ESP32 interfacing with a small display to show shopping lists or other household information, potentially with app synchronization.
 
-[Back to Top](#my_yard)
+[Back to Top](#my-yard-logo-anchor)
 
 
 ## Contributing
@@ -147,4 +148,4 @@ We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting 
 1.  **Check Existing Requests:** Look through the existing issues/feature requests to see if your idea has already been suggested.
 2.  **Open an Issue:** If not, open a new issue, clearly describing the feature you'd like to see, why it would be useful, and any potential implementation ideas.
 
-[Back to Top](#my_yard)
+[Back to Top](#my-yard-logo-anchor)
