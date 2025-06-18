@@ -10,6 +10,7 @@
 * [Data Storage](#data-storage)
 * [Other Project Documentation](#other-project-documentation)
 * [Contributing](#contributing)
+* [License](#license)
 
 
 ## Description
@@ -125,7 +126,6 @@ This section provides links to other relevant README files within the `my_yard` 
 
 [Back to Top](#my-yard-logo-anchor)
 
-
 ## Contributing
 
 We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting a fix, or proposing a new feature, your help is appreciated.
@@ -150,5 +150,9 @@ We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting 
 ### Requesting Features
 1.  **Check Existing Requests:** Look through the existing issues/feature requests to see if your idea has already been suggested.
 2.  **Open an Issue:** If not, open a new issue, clearly describing the feature you'd like to see, why it would be useful, and any potential implementation ideas.
+
+[Back to Top](#my-yard-logo-anchor)
+
+This project is licensed under the Mozilla Public License 2.0 (MPL-2.0) - see the [LICENSE](LICENSE) file for details.
 
 [Back to Top](#my-yard-logo-anchor)
