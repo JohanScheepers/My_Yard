@@ -153,6 +153,9 @@ We welcome contributions to `my_yard`! Whether it's reporting a bug, submitting 
 
 [Back to Top](#my-yard-logo-anchor)
 
+
+## License
+
 This project is licensed under the Mozilla Public License 2.0 (MPL-2.0) - see the [LICENSE](LICENSE) file for details.
 
 [Back to Top](#my-yard-logo-anchor)
