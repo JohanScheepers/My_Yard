@@ -1,3 +1,6 @@
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard
+
 import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'dart:async'; // For StreamSubscription

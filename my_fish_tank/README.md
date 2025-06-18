@@ -189,3 +189,7 @@ When the Flutter application requests historical sensor data using the "Sensor D
     
 }
 ```
+
+
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard

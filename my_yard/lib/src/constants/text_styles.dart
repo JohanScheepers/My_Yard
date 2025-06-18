@@ -1,3 +1,6 @@
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard
+
 import 'package:flutter/material.dart';
 
 // It's good practice to define a base text theme and then customize it.

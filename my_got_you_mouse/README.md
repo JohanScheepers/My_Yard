@@ -21,3 +21,6 @@ This project utilizes the following hardware components for the mouse trap syste
 Further details about the project's software, how these components interact, and the overall functionality will follow.
 
 [Back to Top](#readme-for-my_got_you_mouse_project)
+
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard

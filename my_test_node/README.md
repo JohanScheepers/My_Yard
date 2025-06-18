@@ -15,3 +15,6 @@ This project utilizes the following hardware components to test node:
 Further details about the project's software, and functionality will follow.
 
 [Back to Top](#readme-for-my_lights_project)
+
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard

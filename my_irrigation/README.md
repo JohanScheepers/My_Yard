@@ -62,3 +62,6 @@ This project utilizes the following hardware components, broken down by sub-syst
 Further details about the project's software, how these components interact, and the overall functionality will follow.
 
 [Back to Top](#readme-for-my_irrigation_project)
+
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard

@@ -132,3 +132,7 @@ After processing a command from the app, the ESP32 sends a JSON response to conf
 **Note:** The IP address `"192.168.1.123"` is a placeholder in the README and will be replaced by the actual IP of the ESP32 in the live responses.
 
 [Back to Top](#readme-for-my_go_mole_project)
+
+
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard

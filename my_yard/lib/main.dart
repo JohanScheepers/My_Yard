@@ -1,3 +1,6 @@
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart'; // For CupertinoTheme and CupertinoThemeData
 import 'package:my_yard/src/routing/app_router.dart';

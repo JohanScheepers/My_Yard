@@ -1,3 +1,6 @@
+// Copyright (c) [2025] Johan Scheepers
+// GitHub: https://github.com/JohanScheepers/My_Yard
+
 import 'package:flutter/material.dart';
 import 'package:my_yard/src/constants/ui_constants.dart';
 import 'package:my_yard/src/features/scan/presentation/scan_screen.dart';
