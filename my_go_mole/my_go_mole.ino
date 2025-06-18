@@ -15,7 +15,7 @@
 // --- Configuration ---
 const char *ssid = "YOUR_WIFI_SSID";
 const char *password = "YOUR_WIFI_PASSWORD";
-const char *esp_hostname = "my-go-mole"; // Define your desired hostname here
+const char *esp_hostname = "mesp_hostnamey-go-mole"; // Define your desired hostname here
 
 // Transducer Configuration
 const int transducerPin = 25;       // GPIO pin for the transducer

@@ -41,3 +41,8 @@ const SizedBox kVerticalSpacerXXLarge = SizedBox(height: kSpaceXXLarge);
 const SizedBox kHorizontalSpacerSmall = SizedBox(width: kSpaceSmall);
 const SizedBox kHorizontalSpacerMedium = SizedBox(width: kSpaceMedium);
 const SizedBox kHorizontalSpacerLarge = SizedBox(width: kSpaceLarge);
+
+// lib/src/constants/ui_constants.dart
+// ... other constants
+const double kWideLayoutBreakpoint = 600.0;
+// ...

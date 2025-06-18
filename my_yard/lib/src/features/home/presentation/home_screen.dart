@@ -13,13 +13,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // Define a breakpoint for wide layouts - moved here for access within buildHomeContent
-  static const double wideLayoutBreakpoint = 600.0;
-
   Widget _buildHomeContent(BoxConstraints constraints) {
     // Determine if a wide layout should be used based on the breakpoint
-    final bool useHorizontalLayout =
-        constraints.maxWidth >= wideLayoutBreakpoint;
+    final bool useHorizontalLayout = constraints.maxWidth >= kWideLayoutBreakpoint;
 
     // Define common content widgets to avoid repetition
     final Widget welcomeTextWidget = Text(
@@ -108,11 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: LayoutBuilder( // To make AppBar title responsive if needed
-          builder: (context, constraints) {
-            final String sizeIndicator =
-                constraints.maxWidth >= wideLayoutBreakpoint
-                    ? "(Wide)"
-                    : "(Narrow)";
+          builder: (context, constraints) {            
             // You might want a more sophisticated way to set titles per tab
             //return Text('My Yard - ${_getTabName(_selectedIndex)} $sizeIndicator');
              return Text(
