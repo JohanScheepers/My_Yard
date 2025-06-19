@@ -7,16 +7,17 @@
 #include <WiFi.h>
 #include "time.h" // For time functions
 
-#include <Wire.h>     // For I2C communication
-#include <axp20x.h>   // For AXP192 Power Management
-#include <U8g2lib.h>  // U8g2 graphics library
+#include <Wire.h>    // For I2C communication
+#include <axp20x.h>  // For AXP192 Power Management
+#include <U8g2lib.h> // U8g2 graphics library
 #include <esp_wifi.h> // For esp_wifi_get_tx_packet_cnt and esp_wifi_get_rx_packet_cnt (if you re-add packet count)
+
 
 // --- Configuration ---
 
 // WiFi credentials
-const char *ssid = "#####";
-const char *password = "#####**"; // Consider security implications for shared code
+const char *ssid = "Land Rover";
+const char *password = "moon01**"; // Consider security implications for shared code
 
 // NTP Configuration
 const char *ntpServer = "pool.ntp.org";
@@ -28,6 +29,8 @@ const int daylightOffset_sec = 0;    // No daylight saving offset for simplicity
 const int led1Pin = 13;    // Changed to GPIO13
 const int led2Pin = 14;    // Changed to GPIO14
 const int airPumpPin = 25; // Changed to GPIO25
+const int gpio33Pin = 33; // GPIO33 - User definable, set low as requested
+
 
 // OLED Display Configuration
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -107,8 +110,8 @@ void setupOLED()
     u8g2.clearBuffer();                     // clear the internal memory
     u8g2.setFont(u8g2_font_ncenB08_tr);     // choose a suitable font
     u8g2.drawStr(0, 10, "Initializing..."); // write string to the buffer
-    u8g2.drawStr(0, 20, copyrightLine1a);   // write string to the buffer
-    u8g2.drawStr(0, 30, copyrightLine1b);   // write string to the buffer
+    u8g2.drawStr(0, 20, copyrightLine1a); // write string to the buffer
+    u8g2.drawStr(0, 30, copyrightLine1b); // write string to the buffer
     u8g2.sendBuffer();                      // transfer internal memory to the display
     delay(1000);
 }
@@ -204,6 +207,8 @@ void updateOLED()
             // Line 3: RSSI (placeholder)
             u8g2.drawStr(0, yPos, "RSSI: --- dBm");
             yPos += wifiDetailFontHeight + wifiLineSpacing;
+
+
         }
     }
     else if (currentDisplayState == TANK_STATUS)
@@ -351,15 +356,20 @@ void setup()
     pinMode(led1Pin, OUTPUT);
     pinMode(led2Pin, OUTPUT);
     pinMode(airPumpPin, OUTPUT);
+    pinMode(gpio33Pin, OUTPUT); // Initialize GPIO 33
+
 
     // Ensure scheduled outputs are OFF initially (standard logic: LOW means OFF)
-    digitalWrite(led1Pin, HIGH);
-    digitalWrite(led2Pin, HIGH);
-    digitalWrite(airPumpPin, HIGH);
-
+    digitalWrite(led1Pin, LOW);
+    digitalWrite(led2Pin, LOW);
+    digitalWrite(airPumpPin, LOW);
+    digitalWrite(gpio33Pin, LOW); // Set GPIO 33 LOW as requested
     led1Status = false;
     led2Status = false;
     airPumpStatus = false;
+
+
+    Serial.println("Scheduled outputs initialized to OFF (GPIOs set LOW). GPIO 33 set LOW.");
 
     setupWiFi();
     setupTime();
@@ -414,15 +424,16 @@ void controlOutputs()
 
     // LED 1 Control
     led1Status = isTimeWithinSchedule(currentHour, currentMin, led1OnHour, led1OnMin, led1OffHour, led1OffMin);
-    digitalWrite(led1Pin, led1Status ? LOW : HIGH); // Standard: HIGH for ON, LOW for OFF
+    digitalWrite(led1Pin, led1Status ? HIGH : LOW); // Standard: HIGH for ON, LOW for OFF
 
     // LED 2 Control
     led2Status = isTimeWithinSchedule(currentHour, currentMin, led2OnHour, led2OnMin, led2OffHour, led2OffMin);
-    digitalWrite(led2Pin, led2Status ? LOW : HIGH); // Standard: HIGH for ON, LOW for OFF
+    digitalWrite(led2Pin, led2Status ? HIGH : LOW); // Standard: HIGH for ON, LOW for OFF
 
     // Air Pump Control
     airPumpStatus = isTimeWithinSchedule(currentHour, currentMin, airPumpOnHour, airPumpOnMin, airPumpOffHour, airPumpOffMin);
-    digitalWrite(airPumpPin, airPumpStatus ? LOW : HIGH); // Standard: HIGH for ON, LOW for OFF
+    digitalWrite(airPumpPin, airPumpStatus ? HIGH : LOW); // Standard: HIGH for ON, LOW for OFF
+
 }
 
 unsigned long lastOledUpdateTime = 0;
