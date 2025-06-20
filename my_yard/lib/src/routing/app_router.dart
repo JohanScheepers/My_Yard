@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_yard/src/features/home/presentation/home_screen.dart';
 import 'package:my_yard/src/features/splash/presentation/splash_screen.dart';
+import 'package:my_yard/src/constants/ui_constants.dart';
 import 'package:my_yard/src/features/settings/presentation/settings_screen.dart';
 
 // Route names for type-safe navigation
@@ -42,8 +43,7 @@ class AppRouter {
               // Fade transition
               return FadeTransition(opacity: animation, child: child);
             },
-            transitionDuration:
-                const Duration(milliseconds: 300), // Adjust duration as needed
+            transitionDuration: kAnimationDurationMedium, // Using constant
           );
         },
       ),
@@ -51,8 +51,16 @@ class AppRouter {
         path: SettingsScreen
             .routeName, // Using the static routeName from SettingsScreen
         name: AppRoute.settings, // Using the new route name constant
-        builder: (BuildContext context, GoRouterState state) {
-          return const SettingsScreen();
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          // Define a custom transition for the SettingsScreen
+          return CustomTransitionPage<void>(
+            key: state.pageKey,
+            child: const SettingsScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration: kAnimationDurationMedium, // Using constant
+          );
         },
       ),
     ],

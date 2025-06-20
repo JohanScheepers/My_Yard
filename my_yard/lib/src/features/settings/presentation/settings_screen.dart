@@ -3,9 +3,12 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:my_yard/src/features/settings/application/unit_notifier.dart'; // Import the new unit notifier
+import 'package:my_yard/src/constants/ui_constants.dart'; // Import UI constants
 import 'package:my_yard/src/features/settings/application/theme_notifier.dart'; // Import the theme notifier
 
-class SettingsScreen extends ConsumerWidget { // Change to ConsumerWidget
+class SettingsScreen extends ConsumerWidget {
+  // Change to ConsumerWidget
   const SettingsScreen({super.key});
 
   // It's good practice to define a routeName for navigation,
@@ -13,43 +16,130 @@ class SettingsScreen extends ConsumerWidget { // Change to ConsumerWidget
   static const String routeName = '/settings';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) { // Add WidgetRef
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Add WidgetRef
     // Watch the theme notifier to get the current theme mode
-    final currentThemeMode = ref.watch(themeNotifierProvider);
+    final currentThemeMode = ref.watch(themeNotifierProvider); // Existing
+    final currentUnitSystem =
+        ref.watch(unitNotifierProvider); // Watch the new unit notifier
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: ListView( // Use ListView for potential future settings
+      body: ListView( // Using constants
+        padding: const EdgeInsets.all(kSpaceMedium), // Increased padding around the card
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Theme Preference',
-              style: Theme.of(context).textTheme.titleMedium,
+          Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: kCardElevationDefault, // Slightly increased elevation for more prominence
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // --- Theme Preference Section ---
+                Container( // Using constants
+                  color: Theme.of(context).colorScheme.surfaceVariant, // Subtle background for the section
+                  padding: const EdgeInsets.symmetric(vertical: kSpaceSmall), // Padding for the section container
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding( // Using constants
+                        padding: kSettingsSectionTitlePadding, // Adjusted padding
+                        child: Text(
+                          'Theme Preference',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold, // Make title bolder
+                              ),
+                        ),
+                      ),
+                      currentThemeMode.when(
+                        data: (mode) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: AppThemeMode.values.map((themeModeOption) {
+                            return RadioListTile<AppThemeMode>(
+                              title: Text(themeModeOption.name[0].toUpperCase() +
+                                  themeModeOption.name.substring(1)),
+                              value: themeModeOption,
+                              groupValue: mode,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  ref
+                                      .read(themeNotifierProvider.notifier)
+                                      .setThemeMode(value);
+                                }
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        loading: () => const Padding(
+                          padding: EdgeInsets.all(kSpaceMedium), // Using constant
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                        error: (err, stack) => Padding(
+                          padding: const EdgeInsets.all(kSpaceMedium), // Using constant
+                          child: Center(child: Text('Error loading theme: $err')),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Divider between sections within the card
+                const Divider(height: 1, thickness: kDividerThickness, indent: kDividerIndent, endIndent: kDividerIndent), // Using constants
+
+                // --- Unit System Section ---
+                Container( // Using constants
+                  color: Theme.of(context).colorScheme.surface, // Default surface color for contrast
+                  padding: const EdgeInsets.symmetric(vertical: kSpaceSmall),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding( // Using constants
+                        padding: kSettingsSectionTitlePadding,
+                        child: Text(
+                          'Unit System',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold, // Make title bolder
+                              ),
+                        ),
+                      ),
+                      currentUnitSystem.when(
+                        data: (system) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: UnitSystem.values.map((unitSystemOption) {
+                            return RadioListTile<UnitSystem>(
+                              title: Text(unitSystemOption.name[0].toUpperCase() +
+                                  unitSystemOption.name.substring(1)),
+                              value: unitSystemOption,
+                              groupValue: system,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  ref
+                                      .read(unitNotifierProvider.notifier)
+                                      .setUnitSystem(value);
+                                }
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        loading: () => const Padding(
+                          padding: EdgeInsets.all(kSpaceMedium), // Using constant
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                        error: (err, stack) => Padding(
+                          padding: const EdgeInsets.all(kSpaceMedium), // Using constant
+                          child:
+                              Center(child: Text('Error loading unit system: $err')),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-          // Use when to handle the AsyncValue state
-          currentThemeMode.when(
-            data: (mode) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: AppThemeMode.values.map((themeModeOption) {
-                return RadioListTile<AppThemeMode>(
-                  title: Text(themeModeOption.name.toUpperCase()),
-                  value: themeModeOption,
-                  groupValue: mode,
-                  onChanged: (value) {
-                    if (value != null) {
-                      ref.read(themeNotifierProvider.notifier).setThemeMode(value);
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, stack) => Center(child: Text('Error loading theme: $err')),
           ),
         ],
       ),

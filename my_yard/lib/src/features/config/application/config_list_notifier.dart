@@ -6,16 +6,16 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'device_list_notifier.g.dart';
+part 'config_list_notifier.g.dart';
 
-const String _kDiscoveredDevicesKey = 'discovered_devices_list';
+const String _kConfiguredDevicesKey = 'configured_devices_list';
 
 /// A typedef for device data. In a real app, this would be a dedicated model class.
 /// Example: {'ip': '192.168.1.10', 'name': 'My ESP32', 'type': 'esp32'}
 typedef DeviceData = Map<String, String>;
 
 @Riverpod(keepAlive: true)
-class DeviceListNotifier extends _$DeviceListNotifier {
+class ConfigListNotifier extends _$ConfigListNotifier {
   SharedPreferences? _prefs;
 
   @override
@@ -26,16 +26,17 @@ class DeviceListNotifier extends _$DeviceListNotifier {
 
   List<DeviceData> _loadDevicesFromPrefs() {
     final List<String>? devicesJson =
-        _prefs?.getStringList(_kDiscoveredDevicesKey);
+        _prefs?.getStringList(_kConfiguredDevicesKey);
     if (devicesJson != null) {
       try {
         return devicesJson
             .map((jsonString) => DeviceData.from(jsonDecode(jsonString) as Map))
             .toList();
       } catch (e) {
-        debugPrint('Error decoding devices from SharedPreferences: $e');
+        debugPrint(
+            'Error decoding configured devices from SharedPreferences: $e');
         // Optionally clear corrupted data
-        // _prefs?.remove(_kDiscoveredDevicesKey);
+        // _prefs?.remove(_kConfiguredDevicesKey);
         return [];
       }
     }
@@ -45,7 +46,7 @@ class DeviceListNotifier extends _$DeviceListNotifier {
   Future<void> _saveDevicesToPrefs(List<DeviceData> devices) async {
     final List<String> devicesJson =
         devices.map((device) => jsonEncode(device)).toList();
-    await _prefs?.setStringList(_kDiscoveredDevicesKey, devicesJson);
+    await _prefs?.setStringList(_kConfiguredDevicesKey, devicesJson);
   }
 
   Future<void> addDevice(DeviceData newDevice) async {
@@ -68,7 +69,7 @@ class DeviceListNotifier extends _$DeviceListNotifier {
 
   Future<void> clearAllDevices() async {
     state = const AsyncData([]);
-    await _prefs?.remove(_kDiscoveredDevicesKey);
+    await _prefs?.remove(_kConfiguredDevicesKey);
   }
 
   // Method to manually refresh or reload from prefs if needed

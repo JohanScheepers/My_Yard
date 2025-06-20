@@ -6,8 +6,8 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'dart:async'; // For StreamSubscription
 import 'package:dart_ping/dart_ping.dart';
 import 'dart:io'; // For InternetAddress
-
 import 'package:my_yard/src/constants/ui_constants.dart';
+
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -80,7 +80,7 @@ class _ScanScreenState extends State<ScanScreen> {
       }
 
       _pingsSent++;
-      final ping = Ping(currentIP, count: 1, timeout: 1);
+      final ping = Ping(currentIP, count: 1, timeout: kPingTimeoutDuration); // Using constant
       bool deviceFoundThisAttempt = false;
 
       try {
@@ -176,7 +176,7 @@ class _ScanScreenState extends State<ScanScreen> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isScanning
+                backgroundColor: _isScanning // Using theme colors
                     ? Colors.redAccent
                     : Theme.of(context)
                         .colorScheme
@@ -186,21 +186,21 @@ class _ScanScreenState extends State<ScanScreen> {
                     : Theme.of(context)
                         .colorScheme
                         .onPrimary, // Standard text color for primary buttons
-                minimumSize:
-                    const Size(220, 48), // Ensures consistent button size
+                minimumSize: kButtonMinSize, // Using constant
               ),
               child: Text(_isScanning ? 'Stop Scan' : 'Scan Local Network'),
             ),
           );
 
           Widget localIpInfo = _localIP != null
-              ? Padding(
-                  padding:
-                      useWideLayout ? EdgeInsets.zero : kVerticalPaddingMedium,
+              ? Padding( // Using constant
+                  padding: useWideLayout
+                      ? EdgeInsets.zero
+                      : kVerticalPaddingMedium,
                   child: Text('Your IP: $_localIP',
                       style: Theme.of(context).textTheme.titleSmall),
                 )
-              : const SizedBox.shrink();
+              : kVerticalSpacerMedium; // Using a spacer for consistency when IP is null
 
           Widget statsDisplaySection;
           if (_isScanning || _pingsSent > 0) {
@@ -212,17 +212,17 @@ class _ScanScreenState extends State<ScanScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  if (_isScanning)
+                  if (_isScanning) // Using constant
                     const CircularProgressIndicator(
-                      // Spinner is now fully opaque
-                      strokeWidth: 3.0,
+                      strokeWidth: kCircularProgressStrokeWidth,
                     ),
                   Card(
-                    elevation: 2.0,
+                    elevation: kCardElevationDefault, // Using constant
                     // Make card semi-transparent when scanning to show spinner behind it
                     color: _isScanning
-                        ? Theme.of(context).cardColor.withAlpha(
-                            50) // Approx 60% opaque. Adjust alpha (0-255) as needed.
+                        ? Theme.of(context)
+                            .cardColor
+                            .withAlpha(kCardOverlayAlpha) // Using constant
                         : null, // Default card color when not scanning
                     child: Padding(
                       padding: const EdgeInsets.all(
@@ -237,9 +237,9 @@ class _ScanScreenState extends State<ScanScreen> {
                           Text('Successful: $_successfulPings'),
                           Text('Failed/Timeout: $_unsuccessfulPings'),
                           if (_isScanning && _currentPingTargetIP != null)
-                            Padding(
-                                padding:
-                                    const EdgeInsets.only(top: kSpaceXSmall),
+                            Padding( // Using constant
+                                padding: const EdgeInsets.only(
+                                    top: kSpaceXSmall),
                                 child: Text('Pinging: $_currentPingTargetIP',
                                     style:
                                         Theme.of(context).textTheme.bodySmall)),
@@ -266,17 +266,19 @@ class _ScanScreenState extends State<ScanScreen> {
                           final device = _discoveredDevices[index];
                           final subtitleParts = <String>[];
                           if (device.hostname != null &&
-                              device.hostname != device.ip)
+                              device.hostname != device.ip) {
                             subtitleParts.add('Hostname: ${device.hostname}');
-                          if (device.pingTime != null)
+                          }
+                          if (device.pingTime != null) {
                             subtitleParts.add(
                                 'Response Time: ${device.pingTime!.inMilliseconds}ms');
+                          }
 
-                          return Card(
-                            margin: const EdgeInsets.symmetric(
+                          return Card( // Using constants
+                            elevation: kCardElevationDefault,
+                            margin: const EdgeInsets.symmetric( 
                                 horizontal: kSpaceMedium,
                                 vertical: kSpaceXSmall),
-                            elevation: 2.0,
                             child: ListTile(
                               title: Text(device.ip),
                               subtitle: subtitleParts.isNotEmpty
