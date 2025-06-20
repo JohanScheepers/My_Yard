@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_yard/src/constants/ui_constants.dart';
 import 'package:my_yard/src/features/scan/presentation/scan_screen.dart';
+import 'package:go_router/go_router.dart'; // Import go_router
+import 'package:my_yard/src/features/settings/presentation/settings_screen.dart';
 import 'package:my_yard/src/features/device/presentation/device_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,9 +18,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
+  // Key to preserve the state of the IndexedStack and its children (like ScanScreen)
+  final GlobalKey _indexedStackKey = GlobalKey(debugLabel: 'homeIndexedStack');
+
   Widget _buildHomeContent(BoxConstraints constraints) {
     // Determine if a wide layout should be used based on the breakpoint
-    final bool useHorizontalLayout = constraints.maxWidth >= kWideLayoutBreakpoint;
+    final bool useHorizontalLayout =
+        constraints.maxWidth >= kWideLayoutBreakpoint;
 
     // Define common content widgets to avoid repetition
     final Widget welcomeTextWidget = Text(
@@ -94,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onItemTapped(int index) {
     setState(() {
+      // No need for _previousIndex with AnimatedOpacity
       _selectedIndex = index;
     });
   }
@@ -101,44 +108,111 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // The AppBar title might need to be dynamic if each tab should have a different title
-    // For now, it reflects the general HomeScreen and its responsive state.
-    // We use a LayoutBuilder here just to update the AppBar title based on width,
-    // but the main content switching is handled by _selectedIndex.
-    return Scaffold(
-      appBar: AppBar(
-        title: LayoutBuilder( // To make AppBar title responsive if needed
-          builder: (context, constraints) {            
-            // You might want a more sophisticated way to set titles per tab
-            //return Text('My Yard - ${_getTabName(_selectedIndex)} $sizeIndicator');
-             return Text(
-              'My Yard - ${_getTabName(_selectedIndex)}');
-          }
+    // It now correctly reflects the selected tab name.
+    return LayoutBuilder(builder: (context, constraints) {
+      final bool useWideLayout = constraints.maxWidth >= kWideLayoutBreakpoint;
+      Widget? bottomNavBar;
+      Widget? navRail;
+
+      if (useWideLayout) {
+        navRail = NavigationRail(
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: _onItemTapped,
+          labelType: NavigationRailLabelType.all,
+          destinations: const <NavigationRailDestination>[
+            NavigationRailDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
+              label: Text('Home'),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.qr_code_scanner_outlined),
+              selectedIcon: Icon(Icons.qr_code_scanner),
+              label: Text('Scan'),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.devices_outlined),
+              selectedIcon: Icon(Icons.devices),
+              label: Text('Device'),
+            ),
+          ],
+        );
+      } else {
+        bottomNavBar = BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.qr_code_scanner),
+              label: 'Scan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.devices),
+              label: 'Device',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          onTap: _onItemTapped,
+        );
+      }
+
+      // Use IndexedStack to manage the selected screen and preserve its state.
+      // Wrap each child with AnimatedOpacity to animate transitions.
+      final List<Widget> animatedWidgetOptions = List.generate(
+        _widgetOptions.length,
+        (index) {
+          // AnimatedOpacity handles the transition when its opacity changes.
+          // The opacity is 1.0 for the selected index, 0.0 otherwise.
+          return AnimatedOpacity(
+            opacity: _selectedIndex == index ? 1.0 : 0.0,
+            duration:
+                const Duration(milliseconds: 500), // Adjust duration as needed
+            curve: Curves.easeInOut, // Adjust curve as needed
+            // Ensure the child is interactive only when visible
+            child: IgnorePointer(
+              ignoring: _selectedIndex != index,
+              child: _widgetOptions[index],
+            ),
+          );
+        },
+      );
+
+      // Use IndexedStack to manage the selected screen and preserve its state.
+      final Widget bodyContent = IndexedStack(
+        key: _indexedStackKey, // Assign the GlobalKey here
+        index:
+            _selectedIndex, // IndexedStack still needs the index to stack correctly
+        children: animatedWidgetOptions, // Use the animated children
+      );
+
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('My Yard - ${_getTabName(_selectedIndex)}'),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Settings',
+              onPressed: () {
+                // Navigate to the SettingsScreen using go_router
+                context.push(SettingsScreen.routeName);
+              },
+            ),
+          ],
         ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code_scanner), // Changed icon
-            label: 'Scan', // Changed label
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.devices), // Changed icon
-            label: 'Device', // Changed label
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        onTap: _onItemTapped,
-      ),
-    );
+        body: useWideLayout
+            ? Row(children: [
+                if (navRail != null) navRail,
+                const VerticalDivider(thickness: 1, width: 1),
+                Expanded(child: bodyContent),
+              ])
+            : bodyContent,
+        bottomNavigationBar: bottomNavBar,
+      );
+    });
   }
 
   String _getTabName(int index) {

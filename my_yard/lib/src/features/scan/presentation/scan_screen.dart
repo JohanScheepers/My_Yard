@@ -25,7 +25,6 @@ class _ScanScreenState extends State<ScanScreen> {
   int _unsuccessfulPings = 0;
   String? _currentPingTargetIP;
 
-
   @override
   void initState() {
     super.initState();
@@ -43,7 +42,9 @@ class _ScanScreenState extends State<ScanScreen> {
       debugPrint("Failed to get local IP: $e");
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to get local IP: $e. Ensure Wi-Fi is connected and permissions are granted.')),
+          SnackBar(
+              content: Text(
+                  'Failed to get local IP: $e. Ensure Wi-Fi is connected and permissions are granted.')),
         );
       }
     }
@@ -52,7 +53,9 @@ class _ScanScreenState extends State<ScanScreen> {
   void _startScan() async {
     if (_localIP == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not determine local IP. Ensure Wi-Fi is connected.')),
+        const SnackBar(
+            content: Text(
+                'Could not determine local IP. Ensure Wi-Fi is connected.')),
       );
       return;
     }
@@ -69,16 +72,15 @@ class _ScanScreenState extends State<ScanScreen> {
     final String subnet = _localIP!.substring(0, _localIP!.lastIndexOf('.'));
 
     for (int i = 1; i < 255; i++) {
-      if (!_isScanning) break; 
+      if (!_isScanning) break;
 
       final String currentIP = '$subnet.$i';
       if (mounted) {
         setState(() => _currentPingTargetIP = currentIP);
       }
 
-
       _pingsSent++;
-      final ping = Ping(currentIP, count: 1, timeout: 1); 
+      final ping = Ping(currentIP, count: 1, timeout: 1);
       bool deviceFoundThisAttempt = false;
 
       try {
@@ -99,16 +101,18 @@ class _ScanScreenState extends State<ScanScreen> {
                   hostname: hostname,
                   pingTime: pingTime,
                 ));
-                _discoveredDevices.sort((a, b) => _ipToComparable(a.ip).compareTo(_ipToComparable(b.ip)));
+                _discoveredDevices.sort((a, b) =>
+                    _ipToComparable(a.ip).compareTo(_ipToComparable(b.ip)));
                 _successfulPings++;
                 deviceFoundThisAttempt = true;
               }
             }
-            debugPrint('Found device: $currentIP ${hostname != null && hostname != currentIP ? "($hostname)" : ""} in ${pingTime?.inMilliseconds}ms');
-            break; 
+            debugPrint(
+                'Found device: $currentIP ${hostname != null && hostname != currentIP ? "($hostname)" : ""} in ${pingTime?.inMilliseconds}ms');
+            break;
           } else if (event.error != null) {
             debugPrint('Ping error for $currentIP: ${event.error}');
-            break; 
+            break;
           }
         }
       } catch (e) {
@@ -131,7 +135,7 @@ class _ScanScreenState extends State<ScanScreen> {
     }
     debugPrint('Scan finished.');
   }
-  
+
   void _stopScan() {
     setState(() {
       _isScanning = false;
@@ -146,7 +150,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   void dispose() {
-    _isScanning = false; 
+    _isScanning = false;
     _currentPingTargetIP = null;
     super.dispose();
   }
@@ -156,10 +160,13 @@ class _ScanScreenState extends State<ScanScreen> {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final bool useWideLayout = constraints.maxWidth >= kWideLayoutBreakpoint;
+          final bool useWideLayout =
+              constraints.maxWidth >= kWideLayoutBreakpoint;
 
           Widget scanButton = Padding(
-            padding: useWideLayout ? const EdgeInsets.only(bottom: kSpaceMedium) : kPagePadding,
+            padding: useWideLayout
+                ? const EdgeInsets.only(bottom: kSpaceMedium)
+                : kPagePadding,
             child: ElevatedButton(
               onPressed: () {
                 if (_isScanning) {
@@ -169,13 +176,18 @@ class _ScanScreenState extends State<ScanScreen> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isScanning 
-                    ? Colors.redAccent 
-                    : Theme.of(context).colorScheme.primary, // More defined for "Scan" state
-                foregroundColor: _isScanning 
+                backgroundColor: _isScanning
+                    ? Colors.redAccent
+                    : Theme.of(context)
+                        .colorScheme
+                        .primary, // More defined for "Scan" state
+                foregroundColor: _isScanning
                     ? Colors.white // Ensure text is visible on redAccent
-                    : Theme.of(context).colorScheme.onPrimary, // Standard text color for primary buttons
-                minimumSize: const Size(220, 48), // Ensures consistent button size
+                    : Theme.of(context)
+                        .colorScheme
+                        .onPrimary, // Standard text color for primary buttons
+                minimumSize:
+                    const Size(220, 48), // Ensures consistent button size
               ),
               child: Text(_isScanning ? 'Stop Scan' : 'Scan Local Network'),
             ),
@@ -183,46 +195,58 @@ class _ScanScreenState extends State<ScanScreen> {
 
           Widget localIpInfo = _localIP != null
               ? Padding(
-                  padding: useWideLayout ? EdgeInsets.zero : kVerticalPaddingMedium,
-                  child: Text('Your IP: $_localIP', style: Theme.of(context).textTheme.titleSmall),
+                  padding:
+                      useWideLayout ? EdgeInsets.zero : kVerticalPaddingMedium,
+                  child: Text('Your IP: $_localIP',
+                      style: Theme.of(context).textTheme.titleSmall),
                 )
               : const SizedBox.shrink();
 
           Widget statsDisplaySection;
           if (_isScanning || _pingsSent > 0) {
-
             statsDisplaySection = Padding(
-              padding: useWideLayout 
+              padding: useWideLayout
                   ? const EdgeInsets.symmetric(vertical: kSpaceSmall)
-                  : const EdgeInsets.symmetric(vertical: kSpaceMedium, horizontal: kSpaceLarge),
+                  : const EdgeInsets.symmetric(
+                      vertical: kSpaceMedium, horizontal: kSpaceLarge),
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
                   if (_isScanning)
-                    const CircularProgressIndicator( // Spinner is now fully opaque
-                      strokeWidth: 3.0, 
+                    const CircularProgressIndicator(
+                      // Spinner is now fully opaque
+                      strokeWidth: 3.0,
                     ),
                   Card(
                     elevation: 2.0,
                     // Make card semi-transparent when scanning to show spinner behind it
-                    color: _isScanning 
-                        ? Theme.of(context).cardColor.withAlpha(50) // Approx 60% opaque. Adjust alpha (0-255) as needed.
+                    color: _isScanning
+                        ? Theme.of(context).cardColor.withAlpha(
+                            50) // Approx 60% opaque. Adjust alpha (0-255) as needed.
                         : null, // Default card color when not scanning
                     child: Padding(
-                      padding: const EdgeInsets.all(kSpaceSmall), // Inner padding for the card content
+                      padding: const EdgeInsets.all(
+                          kSpaceSmall), // Inner padding for the card content
                       child: Column(
-                        crossAxisAlignment: useWideLayout ? CrossAxisAlignment.start : CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min, 
+                        crossAxisAlignment: useWideLayout
+                            ? CrossAxisAlignment.start
+                            : CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('Pings Sent: $_pingsSent'),
                           Text('Successful: $_successfulPings'),
                           Text('Failed/Timeout: $_unsuccessfulPings'),
                           if (_isScanning && _currentPingTargetIP != null)
-                            Padding(padding: const EdgeInsets.only(top: kSpaceXSmall), child: Text('Pinging: $_currentPingTargetIP', style: Theme.of(context).textTheme.bodySmall)),
+                            Padding(
+                                padding:
+                                    const EdgeInsets.only(top: kSpaceXSmall),
+                                child: Text('Pinging: $_currentPingTargetIP',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall)),
                         ],
                       ),
                     ),
-                  ), 
+                  ),
                 ],
               ),
             );
@@ -234,25 +258,34 @@ class _ScanScreenState extends State<ScanScreen> {
             child: _discoveredDevices.isEmpty && !_isScanning && _pingsSent == 0
                 ? const Center(child: Text('Tap scan to start.'))
                 : _discoveredDevices.isEmpty && !_isScanning && _pingsSent > 0
-                    ? const Center(child: Text('No devices found on the network.'))
+                    ? const Center(
+                        child: Text('No devices found on the network.'))
                     : ListView.builder(
-                    itemCount: _discoveredDevices.length,
-                    itemBuilder: (context, index) {
-                      final device = _discoveredDevices[index];
-                      final subtitleParts = <String>[];
-                      if (device.hostname != null && device.hostname != device.ip) subtitleParts.add('Hostname: ${device.hostname}');
-                      if (device.pingTime != null) subtitleParts.add('Response Time: ${device.pingTime!.inMilliseconds}ms');
+                        itemCount: _discoveredDevices.length,
+                        itemBuilder: (context, index) {
+                          final device = _discoveredDevices[index];
+                          final subtitleParts = <String>[];
+                          if (device.hostname != null &&
+                              device.hostname != device.ip)
+                            subtitleParts.add('Hostname: ${device.hostname}');
+                          if (device.pingTime != null)
+                            subtitleParts.add(
+                                'Response Time: ${device.pingTime!.inMilliseconds}ms');
 
-                      return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: kSpaceMedium, vertical: kSpaceXSmall),
-                        elevation: 2.0, 
-                        child: ListTile(
-                          title: Text(device.ip),
-                          subtitle: subtitleParts.isNotEmpty ? Text(subtitleParts.join(' | ')) : null,
-                        ),
-                      );
-                    },
-                  ),
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: kSpaceMedium,
+                                vertical: kSpaceXSmall),
+                            elevation: 2.0,
+                            child: ListTile(
+                              title: Text(device.ip),
+                              subtitle: subtitleParts.isNotEmpty
+                                  ? Text(subtitleParts.join(' | '))
+                                  : null,
+                            ),
+                          );
+                        },
+                      ),
           );
 
           if (useWideLayout) {
@@ -282,12 +315,13 @@ class _ScanScreenState extends State<ScanScreen> {
                 deviceList,
               ],
             );
-          } else { // Narrow Layout
+          } else {
+            // Narrow Layout
             return Column(
               children: <Widget>[
-                scanButton, 
-                localIpInfo, 
-                statsDisplaySection, 
+                scanButton,
+                localIpInfo,
+                statsDisplaySection,
                 deviceList
               ],
             );
@@ -297,7 +331,6 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 }
-
 
 class DiscoveredDevice {
   final String ip;

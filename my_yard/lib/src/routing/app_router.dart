@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_yard/src/features/home/presentation/home_screen.dart';
 import 'package:my_yard/src/features/splash/presentation/splash_screen.dart';
+import 'package:my_yard/src/features/settings/presentation/settings_screen.dart';
 
 // Route names for type-safe navigation
 class AppRoute {
   static const String splash = 'splash';
   static const String home = 'home';
+  static const String settings = 'settings'; // Added settings route name
 }
 
 class AppRouter {
@@ -20,15 +22,37 @@ class AppRouter {
       GoRoute(
         path: '/splash',
         name: AppRoute.splash,
-        builder: (BuildContext context, GoRouterState state) {
-          return const SplashScreen();
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          // Usually splash screens don't have exit transitions, but we can add one if needed.
+          // For now, let's keep it simple or use a default transition.
+          // Using builder here for simplicity, or you could define a specific transition.
+          return MaterialPage(child: const SplashScreen(), key: state.pageKey);
         },
       ),
       GoRoute(
         path: '/home',
         name: AppRoute.home,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          // Define a custom transition for the HomeScreen
+          return CustomTransitionPage<void>(
+            key: state.pageKey,
+            child: const HomeScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              // Fade transition
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration:
+                const Duration(milliseconds: 300), // Adjust duration as needed
+          );
+        },
+      ),
+      GoRoute(
+        path: SettingsScreen
+            .routeName, // Using the static routeName from SettingsScreen
+        name: AppRoute.settings, // Using the new route name constant
         builder: (BuildContext context, GoRouterState state) {
-          return const HomeScreen();
+          return const SettingsScreen();
         },
       ),
     ],
