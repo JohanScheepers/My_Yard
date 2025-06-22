@@ -45,9 +45,9 @@ class ConfigScreen extends ConsumerWidget {
               return ListTile(
                 key: ValueKey(deviceIp), // Use a unique key for list items
                 leading: const Icon(Icons.developer_board_outlined),
-                title: Text(device['name'] ?? 'Unknown Device'),
+                title: Text(device['type'] ?? 'Unknown Device'),
                 subtitle: Text(
-                    'IP: ${deviceIp} - Type: ${device['type'] ?? 'Unknown'}'),
+                    'IP: ${deviceIp}'),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_outline,
                       color: Colors
@@ -62,7 +62,7 @@ class ConfigScreen extends ConsumerWidget {
                 ),
                 onTap: () {
                   // TODO: Implement navigation to a device detail/control screen
-                  debugPrint('Tapped on device: ${device['name']}');
+                  debugPrint('Tapped on device: ${device['ip']}');
                 },
               );
             },

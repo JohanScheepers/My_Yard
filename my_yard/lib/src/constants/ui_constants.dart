@@ -53,8 +53,15 @@ const Duration kAnimationDurationLong = Duration(milliseconds: 500);
 const double kDividerThickness = 1.0;
 const double kDividerIndent = 16.0;
 
-// --- Ping Constants ---
-const int kPingTimeoutDuration = 1;
 
 // --- Layout Breakpoints ---
 const double kWideLayoutBreakpoint = 600.0;
+
+
+
+
+
+
+// Timeouts
+const int kPingTimeoutDuration =  1;
+const Duration kHttpRequestTimeoutDuration = Duration(seconds: 5); // New constant for HTTP timeout

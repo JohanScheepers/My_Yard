@@ -7,16 +7,25 @@
 #include <WiFi.h>
 #include "time.h" // For time functions
 
-#include <Wire.h>     // For I2C communication
+#include <WebServer.h> // For the HTTP Server
+#include <ArduinoJson.h> // For JSON parsing and generation
 #include <axp20x.h>   // For AXP192 Power Management
 #include <U8g2lib.h>  // U8g2 graphics library
-#include <esp_wifi.h> // For esp_wifi_get_tx_packet_cnt and esp_wifi_get_rx_packet_cnt (if you re-add packet count)
 
 // --- Configuration ---
 
 // WiFi credentials
-const char *ssid = "#####";
-const char *password = "#####**"; // Consider security implications for shared code
+const char *ssid = "######";
+const char *password = "#######**"; // Consider security implications for shared code
+
+// --- Network Configuration ---
+
+// Node ID for identification in JSON responses
+const char *id = "tank_controller-2"; // Corrected from 'char' to 'const char*'
+const char *nodeType = "my_tank_control_basic";
+
+// Web server will run on port 80
+WebServer server(80);
 
 // NTP Configuration
 const char *ntpServer = "pool.ntp.org";
@@ -57,9 +66,9 @@ const int led1OnMin = 0;
 const int led1OffHour = 20;
 const int led1OffMin = 0;
 
-// LED 2: On 06h00 - Off 20h30
+// LED 2: On 06h30 - Off 20h30
 const int led2OnHour = 6;
-const int led2OnMin = 0;
+const int led2OnMin = 30;
 const int led2OffHour = 20;
 const int led2OffMin = 30;
 
@@ -74,6 +83,7 @@ struct tm timeinfo; // Structure to hold time information
 bool led1Status = false;
 bool led2Status = false;
 bool airPumpStatus = false;
+
 
 // OLED Display State Management
 enum DisplayState
@@ -94,6 +104,47 @@ const char *copyrightLine1b = "Johan Scheepers";
 const char *copyrightLine2a = "GitHub:";
 const char *copyrightLine2b = "https://github.com/";
 const char *copyrightLine2c = "JohanScheepers/My_Yard";
+
+/**
+ * @brief Handles HTTP requests to the root URL and provides status.
+ */
+void handleRoot()
+{
+    Serial.println("Received HTTP GET request for status.");
+
+    // Create the response JSON
+    JsonDocument responseDoc;
+    responseDoc["id"] = id;
+    responseDoc["ip"] = WiFi.localIP().toString();
+    responseDoc["nodeType"] = nodeType;
+    responseDoc["led1Status"] = led1Status;
+    responseDoc["led2Status"] = led2Status;
+    responseDoc["airPumpStatus"] = airPumpStatus;
+
+    // Add time info if available
+    if (getLocalTime(&timeinfo, 50))
+    {
+        char timeBuffer[20];
+        sprintf(timeBuffer, "%02d:%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+        responseDoc["currentTime"] = timeBuffer;
+    }
+    else
+    {
+        responseDoc["currentTime"] = "N/A";
+    }
+
+    // Serialize the response to a string
+    String responseJson;
+    serializeJson(responseDoc, responseJson);
+
+    // Send the response
+    server.send(200, "application/json", responseJson);
+}
+
+void handleNotFound()
+{
+    server.send(404, "text/plain", "404: Not found");
+}
 
 /**
  * @brief Initializes the OLED display.
@@ -193,7 +244,16 @@ void updateOLED()
             sprintf(tempStr, "RSSI: %ld dBm", WiFi.RSSI()); // WiFi.RSSI() returns int32_t
             u8g2.drawStr(0, yPos, tempStr);
             yPos += wifiDetailFontHeight + wifiLineSpacing;
-            u8g2.drawStr(0, yPos, "--------------------"); // Placeholder if TX/RX is disabled
+
+            // Line 4: Node ID
+            snprintf(tempStr, sizeof(tempStr), "ID: %s", id);
+            u8g2.drawStr(0, yPos, tempStr);
+            yPos += wifiDetailFontHeight + wifiLineSpacing;
+
+            // Line 5: Node Type
+            snprintf(tempStr, sizeof(tempStr), "Type: %s", nodeType);
+            u8g2.drawStr(0, yPos, tempStr);
+            
         }
         else
         {
@@ -204,6 +264,13 @@ void updateOLED()
             // Line 3: RSSI (placeholder)
             u8g2.drawStr(0, yPos, "RSSI: --- dBm");
             yPos += wifiDetailFontHeight + wifiLineSpacing;
+
+            // Line 4: Node ID (placeholder)
+            u8g2.drawStr(0, yPos, "ID: ---");
+            yPos += wifiDetailFontHeight + wifiLineSpacing;
+
+            // Line 5: Node Type (placeholder)
+            u8g2.drawStr(0, yPos, "Type: ---");
         }
     }
     else if (currentDisplayState == TANK_STATUS)
@@ -266,6 +333,7 @@ void printLocalTime()
 void setupWiFi()
 {
     Serial.print("Connecting to WiFi: ");
+    WiFi.setHostname("MyYardTankControl"); // Set a custom hostname
     Serial.println(ssid);
     WiFi.begin(ssid, password);
 
@@ -282,6 +350,7 @@ void setupWiFi()
         Serial.println("\nWiFi connected successfully!");
         Serial.print("IP Address: ");
         Serial.println(WiFi.localIP());
+
         updateOLED(); // Update OLED immediately with connection status and IP
     }
     else
@@ -336,6 +405,20 @@ void setupTime()
     }
 }
 
+/**
+ * @brief Sets up the HTTP server routes.
+ */
+void setupHttpServer()
+{
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        server.on("/", HTTP_GET, handleRoot); // Define route for status requests
+        server.onNotFound(handleNotFound);
+        server.begin();
+        Serial.println("HTTP server started.");
+    }
+}
+
 void setup()
 {
     Serial.begin(115200);
@@ -364,6 +447,7 @@ void setup()
     setupWiFi();
     setupTime();
 
+    setupHttpServer();
     updateOLED(); // Initial OLED update after setup
     Serial.println("Setup complete. Starting main loop...");
 }
@@ -447,11 +531,16 @@ void loop()
         {
             Serial.println("\nWiFi Reconnected!");
             setupTime(); // Re-synchronize time after reconnection
+            server.begin(); // Restart the server
         }
         else
         {
             Serial.println("\nWiFi Reconnection failed.");
         }
+    }
+    else
+    {
+        server.handleClient(); // Handle incoming HTTP requests
     }
 
     controlOutputs();

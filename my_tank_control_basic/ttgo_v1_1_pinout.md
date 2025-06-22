@@ -148,3 +148,15 @@ These are controlled by digital output pins. **It is assumed these are connected
 [Back to Top](#table-of-contents)
 
 
+```json
+{"node":"id"
+}
+```
+
+```json
+{
+  "id": "tank_controller-1",
+  "ip": "10.0.0.11",
+  "nodeType": "my_tank_control_basic"
+}
+```

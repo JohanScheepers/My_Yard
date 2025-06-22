@@ -4,20 +4,25 @@
 import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'dart:async'; // For StreamSubscription
-import 'package:dart_ping/dart_ping.dart';
+import 'dart:convert'; // For JSON encoding/decoding
+import 'package:dart_ping/dart_ping.dart'; // Re-added for Ping functionality
 import 'dart:io'; // For InternetAddress
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Added for Riverpod
+import 'package:http/http.dart' as http; // For HTTP requests
 import 'package:my_yard/src/constants/ui_constants.dart';
+// Define a new class for the node information
+import 'package:my_yard/src/features/scan/models/node_info.dart';
+import 'package:my_yard/src/features/config/application/config_list_notifier.dart'; // Added for ConfigListNotifier
 
-
-class ScanScreen extends StatefulWidget {
+class ScanScreen extends ConsumerStatefulWidget { // Changed to ConsumerStatefulWidget
   const ScanScreen({super.key});
 
   @override
-  State<ScanScreen> createState() => _ScanScreenState();
+  ConsumerState<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _ScanScreenState extends State<ScanScreen> {
-  bool _isScanning = false;
+class _ScanScreenState extends ConsumerState<ScanScreen> {
+  bool _isScanning = false; // Renamed from _isScanning to _isScanning
   List<DiscoveredDevice> _discoveredDevices = [];
   String? _localIP;
   int _pingsSent = 0;
@@ -80,7 +85,8 @@ class _ScanScreenState extends State<ScanScreen> {
       }
 
       _pingsSent++;
-      final ping = Ping(currentIP, count: 1, timeout: kPingTimeoutDuration); // Using constant
+      final ping = Ping(currentIP,
+          count: 1, timeout: kPingTimeoutDuration); // Using constant
       bool deviceFoundThisAttempt = false;
 
       try {
@@ -144,6 +150,118 @@ class _ScanScreenState extends State<ScanScreen> {
     debugPrint('Scan manually stopped by user.');
   }
 
+  Future<void> _showNodeInfoDialog(DiscoveredDevice device) async {
+    // Show a loading dialog immediately
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button to close
+      builder: (BuildContext dialogContext) {
+        return const AlertDialog(
+          title: Text('Node Information'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(height: kSpaceMedium),
+              Text('Requesting node info...'),
+            ],
+          ),
+        );
+      },
+    );
+
+    NodeInfo? nodeInfo;
+    String errorMessage = 'Unknown Node';
+
+    try {
+      // Construct the HTTP URL
+      final String url = 'http://${device.ip}/';
+      debugPrint('Sending HTTP GET request to $url');
+
+      // Make the HTTP GET request with a timeout
+      final response = await http.get(Uri.parse(url)).timeout(
+            kHttpRequestTimeoutDuration, // Use a new constant for HTTP timeout
+            onTimeout: () {
+              throw TimeoutException('HTTP request to ${device.ip} timed out.');
+            },
+      );
+
+      if (response.statusCode == 200) {
+        final String responseBody = response.body;
+        debugPrint('Received HTTP response from ${device.ip}: $responseBody');
+        final Map<String, dynamic> jsonResponse =
+            jsonDecode(responseBody) as Map<String, dynamic>;
+        nodeInfo = NodeInfo.fromJson(jsonResponse);
+        
+        // Store the discovered node information in ConfigListNotifier
+        ref.read(configListNotifierProvider.notifier).addDevice(
+          nodeInfo.toDeviceData(), // Convert NodeInfo to DeviceData
+        );
+              
+      } else {
+        errorMessage =
+            'HTTP Error: ${response.statusCode} - ${response.reasonPhrase}';
+        debugPrint(
+            'HTTP request failed for ${device.ip}: ${response.statusCode}');
+      }
+    } on SocketException catch (e) {
+      errorMessage = 'Network error: ${e.message}';
+      debugPrint('UDP SocketException: $e');
+    } on FormatException catch (e) {
+      errorMessage = 'Invalid JSON response: ${e.message}';
+      debugPrint('UDP FormatException: $e');
+    } catch (e) {
+      errorMessage = 'An unexpected error occurred: $e'; // Catch TimeoutException here too
+      debugPrint('HTTP General Error: $e');
+    } finally {
+    }
+
+    // Dismiss the loading dialog
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
+
+    // Show the result dialog
+    if (mounted) {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            title: const Text('Node Information'),
+            content: nodeInfo != null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('ID: ${nodeInfo.id}'),
+                      Text('IP: ${nodeInfo.ip}'),
+                      Text('Type: ${nodeInfo.nodeType}'),
+                      // Add other fields from NodeInfo if available and relevant
+                      if (nodeInfo.led1Status != null)
+                        Text('LED 1: ${nodeInfo.led1Status! ? 'ON' : 'OFF'}'),
+                      if (nodeInfo.led2Status != null)
+                        Text('LED 2: ${nodeInfo.led2Status! ? 'ON' : 'OFF'}'),
+                      if (nodeInfo.airPumpStatus != null)
+                        Text('Air Pump: ${nodeInfo.airPumpStatus! ? 'ON' : 'OFF'}'),
+                      if (nodeInfo.currentTime != null)
+                        Text('Time: ${nodeInfo.currentTime}'),
+                    ],
+                  )
+                : Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   String _ipToComparable(String ip) {
     return ip.split('.').map((part) => part.padLeft(3, '0')).join('.');
   }
@@ -193,10 +311,10 @@ class _ScanScreenState extends State<ScanScreen> {
           );
 
           Widget localIpInfo = _localIP != null
-              ? Padding( // Using constant
-                  padding: useWideLayout
-                      ? EdgeInsets.zero
-                      : kVerticalPaddingMedium,
+              ? Padding(
+                  // Using constant
+                  padding:
+                      useWideLayout ? EdgeInsets.zero : kVerticalPaddingMedium,
                   child: Text('Your IP: $_localIP',
                       style: Theme.of(context).textTheme.titleSmall),
                 )
@@ -237,9 +355,10 @@ class _ScanScreenState extends State<ScanScreen> {
                           Text('Successful: $_successfulPings'),
                           Text('Failed/Timeout: $_unsuccessfulPings'),
                           if (_isScanning && _currentPingTargetIP != null)
-                            Padding( // Using constant
-                                padding: const EdgeInsets.only(
-                                    top: kSpaceXSmall),
+                            Padding(
+                                // Using constant
+                                padding:
+                                    const EdgeInsets.only(top: kSpaceXSmall),
                                 child: Text('Pinging: $_currentPingTargetIP',
                                     style:
                                         Theme.of(context).textTheme.bodySmall)),
@@ -274,9 +393,11 @@ class _ScanScreenState extends State<ScanScreen> {
                                 'Response Time: ${device.pingTime!.inMilliseconds}ms');
                           }
 
-                          return Card( // Using constants
+                          return Card(
+                            // Using constants
+                            // Add onTap to show the node info dialog
                             elevation: kCardElevationDefault,
-                            margin: const EdgeInsets.symmetric( 
+                            margin: const EdgeInsets.symmetric(
                                 horizontal: kSpaceMedium,
                                 vertical: kSpaceXSmall),
                             child: ListTile(
@@ -284,6 +405,7 @@ class _ScanScreenState extends State<ScanScreen> {
                               subtitle: subtitleParts.isNotEmpty
                                   ? Text(subtitleParts.join(' | '))
                                   : null,
+                              onTap: () => _showNodeInfoDialog(device),
                             ),
                           );
                         },

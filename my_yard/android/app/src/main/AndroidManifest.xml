@@ -17,7 +17,7 @@
 
 
     <application
-        android:label="my_yard"
+        android:label="My Yard"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
