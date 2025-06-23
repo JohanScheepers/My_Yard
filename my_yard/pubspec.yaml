@@ -16,7 +16,6 @@ dependencies:
   dart_ping: ^8.0.0
   flutter_riverpod: ^2.6.1 # Use the latest version
   riverpod_annotation: ^2.3.5 # Use the latest version
-  confetti: ^0.8.0
 
 dev_dependencies:
   flutter_test:
