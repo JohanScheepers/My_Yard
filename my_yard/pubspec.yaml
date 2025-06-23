@@ -13,7 +13,7 @@ dependencies:
   go_router: ^15.2.0
   shared_preferences: ^2.5.3
   network_info_plus: ^5.0.3
-  dart_ping: ^8.0.0
+  dart_ping: ^9.0.1
   flutter_riverpod: ^2.6.1 # Use the latest version
   riverpod_annotation: ^2.3.5 # Use the latest version
 
