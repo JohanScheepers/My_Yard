@@ -3,6 +3,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart'; // Import go_router for context.pop()
 import 'package:my_yard/src/features/settings/application/unit_notifier.dart'; // Import the new unit notifier
 import 'package:my_yard/src/constants/ui_constants.dart'; // Import UI constants
 import 'package:my_yard/src/features/settings/application/theme_notifier.dart'; // Import the theme notifier
@@ -23,32 +24,55 @@ class SettingsScreen extends ConsumerWidget {
     final currentUnitSystem =
         ref.watch(unitNotifierProvider); // Watch the new unit notifier
 
+    // Check if we can pop, to decide whether to show a back button
+    final canPop = context.canPop();
+
     return Scaffold(
       appBar: AppBar(
+        // Add the back button here
+        leading: canPop
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  context.pop(); // Navigate back using go_router
+                },
+              )
+            : null, // No back button if it can't pop
         title: const Text('Settings'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: ListView( // Using constants
-        padding: const EdgeInsets.all(kSpaceMedium), // Increased padding around the card
+      body: ListView(
+        // Using constants
+        padding:
+            const EdgeInsets.all(kSpaceMedium), // Increased padding around the card
         children: [
           Card(
             clipBehavior: Clip.antiAlias,
-            elevation: kCardElevationDefault, // Slightly increased elevation for more prominence
+            elevation:
+                kCardElevationDefault, // Slightly increased elevation for more prominence
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // --- Theme Preference Section ---
-                Container( // Using constants
-                  color: Theme.of(context).colorScheme.surfaceVariant, // Subtle background for the section
-                  padding: const EdgeInsets.symmetric(vertical: kSpaceSmall), // Padding for the section container
+                Container(
+                  // Using constants
+                  color: Theme.of(context)
+                      .colorScheme
+                      .surfaceVariant, // Subtle background for the section
+                  padding: const EdgeInsets.symmetric(
+                      vertical: kSpaceSmall), // Padding for the section container
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding( // Using constants
+                      Padding(
+                        // Using constants
                         padding: kSettingsSectionTitlePadding, // Adjusted padding
                         child: Text(
                           'Theme Preference',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold, // Make title bolder
                               ),
@@ -74,12 +98,15 @@ class SettingsScreen extends ConsumerWidget {
                           }).toList(),
                         ),
                         loading: () => const Padding(
-                          padding: EdgeInsets.all(kSpaceMedium), // Using constant
+                          padding:
+                              EdgeInsets.all(kSpaceMedium), // Using constant
                           child: Center(child: CircularProgressIndicator()),
                         ),
                         error: (err, stack) => Padding(
-                          padding: const EdgeInsets.all(kSpaceMedium), // Using constant
-                          child: Center(child: Text('Error loading theme: $err')),
+                          padding: const EdgeInsets.all(
+                              kSpaceMedium), // Using constant
+                          child:
+                              Center(child: Text('Error loading theme: $err')),
                         ),
                       ),
                     ],
@@ -87,20 +114,31 @@ class SettingsScreen extends ConsumerWidget {
                 ),
 
                 // Divider between sections within the card
-                const Divider(height: 1, thickness: kDividerThickness, indent: kDividerIndent, endIndent: kDividerIndent), // Using constants
+                const Divider(
+                    height: 1,
+                    thickness: kDividerThickness,
+                    indent: kDividerIndent,
+                    endIndent: kDividerIndent), // Using constants
 
                 // --- Unit System Section ---
-                Container( // Using constants
-                  color: Theme.of(context).colorScheme.surface, // Default surface color for contrast
+                Container(
+                  // Using constants
+                  color: Theme.of(context)
+                      .colorScheme
+                      .surface, // Default surface color for contrast
                   padding: const EdgeInsets.symmetric(vertical: kSpaceSmall),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding( // Using constants
+                      Padding(
+                        // Using constants
                         padding: kSettingsSectionTitlePadding,
                         child: Text(
                           'Unit System',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold, // Make title bolder
                               ),
@@ -111,7 +149,8 @@ class SettingsScreen extends ConsumerWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: UnitSystem.values.map((unitSystemOption) {
                             return RadioListTile<UnitSystem>(
-                              title: Text(unitSystemOption.name[0].toUpperCase() +
+                              title: Text(unitSystemOption.name[0]
+                                      .toUpperCase() +
                                   unitSystemOption.name.substring(1)),
                               value: unitSystemOption,
                               groupValue: system,
@@ -126,13 +165,15 @@ class SettingsScreen extends ConsumerWidget {
                           }).toList(),
                         ),
                         loading: () => const Padding(
-                          padding: EdgeInsets.all(kSpaceMedium), // Using constant
+                          padding:
+                              EdgeInsets.all(kSpaceMedium), // Using constant
                           child: Center(child: CircularProgressIndicator()),
                         ),
                         error: (err, stack) => Padding(
-                          padding: const EdgeInsets.all(kSpaceMedium), // Using constant
-                          child:
-                              Center(child: Text('Error loading unit system: $err')),
+                          padding: const EdgeInsets.all(
+                              kSpaceMedium), // Using constant
+                          child: Center(
+                              child: Text('Error loading unit system: $err')),
                         ),
                       ),
                     ],
