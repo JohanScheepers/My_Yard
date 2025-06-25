@@ -14,8 +14,9 @@
 
 <video width="640" height="360" controls loop>
   <source src="./assets/my_yard.mp4" type="video/mp4">
-  Your browser does not support the video tag.
 </video>
+
+This project is is driven by Gemini AI
 
 ## Description
 
