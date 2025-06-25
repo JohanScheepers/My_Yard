@@ -12,11 +12,14 @@
 * [Contributing](#contributing)
 * [License](#license)
 
-<video width="640" height="360" controls loop>
-  <source src="./assets/my_yard.mp4" type="video/mp4">
-</video>
 
-This project is is driven by Gemini AI
+[My Yard](./assets/my_yard.mp4)
+
+
+This project is driven by Gemini AI
+
+![My Yard Logo](./assets/gemini.jpg)
+
 
 ## Description
 
