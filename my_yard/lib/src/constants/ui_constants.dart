@@ -36,26 +36,35 @@ const SizedBox kHorizontalSpacerXLarge = SizedBox(width: kSpaceXLarge);
 
 // --- Button Constants ---
 const Size kButtonMinSize = Size(220, 48);
+const double kButtonWidthMedium = 200.0; // Added for specific button width
+
+const double kLogoSizeMedium = 150.0; // Added for logo size
+const double kFlutterLogoSize = 100.0; // Added for FlutterLogo size
+// --- Text Sizes ---
+const double kTextSizeBody = 18.0; // For general body text, e.g., empty state messages
 
 // --- Card Constants ---
 const double kCardElevationDefault = 2.0;
-const int kCardOverlayAlpha = 50; // Alpha value for semi-transparent card overlay (0-255)
+const int kCardOverlayAlpha = 50;
+const double kCardMarginVertical = 4.0;
+const double kBorderRadiusMedium = 12.0;
 
 // --- Circular Progress Indicator Constants ---
 const double kCircularProgressStrokeWidth = 3.0;
 
 // --- Animation Durations ---
 const Duration kAnimationDurationShort = Duration(milliseconds: 150);
-const Duration kAnimationDurationMedium = Duration(milliseconds: 300);
-const Duration kAnimationDurationLong = Duration(milliseconds: 500);
+const Duration kAnimationDurationMedium = Duration(milliseconds: 500);
+const Duration kAnimationDurationLong = Duration(milliseconds: 1300); // Updated to match current usage
 
 // --- Divider Constants ---
 const double kDividerThickness = 1.0;
 const double kDividerIndent = 16.0;
-
+const double kDividerWidth = 1.0; // For vertical divider width (e.g., in wide screen layouts)
+const double kLinearProgressMinHeight = 10.0; // Minimum height for linear progress indicators
 
 // --- Layout Breakpoints ---
-const double kWideLayoutBreakpoint = 600.0;
+const double kMobileBreakpointMax = 600.0; // Max width for mobile layout (e.g., showing bottom nav bar)
 
 
 

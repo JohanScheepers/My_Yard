@@ -12,14 +12,17 @@ import 'package:my_yard/src/features/config/application/config_list_notifier.dar
 // Asset path constant
 const String kLogoPath = 'assets/logo/my_yard_name_256.png';
 
-class SplashScreen extends ConsumerStatefulWidget { // Changed to ConsumerStatefulWidget
+class SplashScreen extends ConsumerStatefulWidget {
+  // Changed to ConsumerStatefulWidget
   const SplashScreen({super.key});
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState(); // Changed to ConsumerState
+  ConsumerState<SplashScreen> createState() =>
+      _SplashScreenState(); // Changed to ConsumerState
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen> { // Changed to ConsumerState
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  // Changed to ConsumerState
   @override
   void initState() {
     super.initState();
@@ -33,7 +36,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> { // Changed to Con
     ref.read(configListNotifierProvider);
 
     // Original delay for splash screen visibility
-    await Future.delayed(const Duration(seconds: 3)); // Adjusted for quicker testing if needed
+    await Future.delayed(
+        const Duration(seconds: 5)); // Adjusted for quicker testing if needed
     if (mounted) {
       context.goNamed(AppRoute.home);
     }
@@ -42,26 +46,100 @@ class _SplashScreenState extends ConsumerState<SplashScreen> { // Changed to Con
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-            child: Image.asset( // Using Image.asset as per lint suggestion
-              kLogoPath,
-              // Consider adding width/height constraints if needed
-              // width: 200,
-            ),
-          ),
-          kVerticalSpacerLarge, // Using constant for spacing
-          Text(
-            'Your Smart Yard, Simplified.',
-            // Using a style from the app's theme
-            // You can choose other styles like .bodyLarge, .headlineSmall etc.
-            style: Theme.of(context).textTheme.titleMedium,
-            textAlign: TextAlign.center,
-          ),
-        ],
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final bool isWide = constraints.maxWidth >
+              kMobileBreakpointMax; // Define your breakpoint for wide layout
+          return isWide
+              ? _buildWideLayout(context)
+              : _buildNarrowLayout(context);
+        },
       ),
+    );
+  }
+
+  Widget _buildNarrowLayout(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Center(
+          child: Image.asset(
+            kLogoPath,
+          ),
+        ),
+        kVerticalSpacerLarge,
+        Text(
+          'Your Smart Yard, Simplified.',
+          style: Theme.of(context).textTheme.titleMedium,
+          textAlign: TextAlign.center,
+        ),
+        kVerticalSpacerSmall,
+        const FlutterLogo(
+          size: kFlutterLogoSize,
+        ),
+        kVerticalSpacerSmall,
+        ClipOval(
+          child: Image.asset(
+            'assets/logo/gemini.jpg',
+            width: kLogoSizeMedium,
+            height: kLogoSizeMedium,
+          ),
+        ),
+        kVerticalSpacerSmall,
+        Text(
+          'Powered by Flutter and Gemini',
+          style: Theme.of(context).textTheme.titleMedium,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWideLayout(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                kLogoPath,
+              ),
+              kVerticalSpacerLarge,
+              Text(
+                'Your Smart Yard, Simplified.',
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const FlutterLogo(
+                size: kFlutterLogoSize,
+              ),
+              kVerticalSpacerSmall,
+              ClipOval(
+                child: Image.asset(
+                  'assets/logo/gemini.jpg',
+                  width: kLogoSizeMedium,
+                  height: kLogoSizeMedium,
+                ),
+              ),
+              kVerticalSpacerSmall,
+              Text(
+                'Powered by Flutter and Gemini',
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -23,7 +23,7 @@ This project is driven by Gemini AI
 
 ## Description
 
-`my_yard` is a Flutter-based mobile application designed to interface with ESP32 micro-controllers. The primary goal of this application is to provide a user-friendly interface for controlling various smart devices and systems deployed around a yard or outdoor space.
+`my_yard` is a Flutter-based mobile application designed to interface with ESP32 micro-controllers. The primary goal of this application is to provide a user-friendly interface for controlling various smart devices and systems deployed around a yard or outdoor space or home.
 
 Communication with the ESP32 devices is established over HTTP, allowing for straightforward and widely supported network interactions. Users can send commands from the app to the ESP32s, which in turn can manage connected hardware.
 
@@ -104,33 +104,33 @@ Sensor readings and relevant event data are primarily stored directly on the ESP
 
 This section provides links to other relevant README files within the `my_yard` project, offering more detailed information on specific components or aspects.
 
-*   **[My Appliance Project](my_appliance/README.md):**
+*   **[My Appliance Project:](my_appliance/README.md)**
     *   Details the hardware components used for controlling an appliance, including the ESP32 micro-controller, power source (solar panel, solar charge controller, battery), 3D printed enclosure, and a relay.
 
-*   **[My Auto Gate & Garage Door Project](my_auto_gate_and_garage_door/README.md):**
-    *  *   Documentation for the `my_auto_gate_and_garage_door` sub-project, likely covering hardware setup and control logic for automating gates and garage doors.
+*   **[My Auto Gate & Garage Door Project:](my_auto_gate_and_garage_door/README.md)**
+    *   Documentation for the `my_auto_gate_and_garage_door` sub-project, likely covering hardware setup and control logic for automating gates and garage doors.
 
-*   **[My Fish Tank Project](my_fish_tank/README.md):**
+*   **[My Fish Tank Project:](my_fish_tank/README.md)**
     *   Documents the `my_fish_tank` sub-project, detailing its hardware components (ESP32, various sensors, actuators for fish tank automation) and the JSON payload structures used for communication between the app and the ESP32.
 
 
-*   **[My Fridge Project](my_fridge/README.md):**
-   *   Details for the `my_fridge` sub-project, potentially involving temperature monitoring, smart features, or inventory tracking for a refrigerator using an ESP32.
+*   **[My Fridge Project:](my_fridge/README.md)**
+    *   Details for the `my_fridge` sub-project, potentially involving temperature monitoring, smart features, or inventory tracking for a refrigerator using an ESP32.
 
-*   **[My Go Mole Project](my_go_mole/README.md):**
+*   **[My Go Mole Project:](my_go_mole/README.md)**
     *   Information regarding the `my_go_mole` sub-project. This could be a game, a pest deterrent system, or another interactive project involving an ESP32.
 
-*   **[My Got You Mouse Project](my_got_you_mouse/README.md):**
+*   **[My Got You Mouse Project:](my_got_you_mouse/README.md)**
     *   Documentation for the `my_got_you_mouse` sub-project, possibly related to a smart mouse trap, a tracking system, or an interactive game controlled by an ESP32
 
-*   **[My Irrigation Project](my_irrigation/README.md):**
+*   **[My Irrigation Project:](my_irrigation/README.md)**
     *   Covers the `my_irrigation` sub-project, likely detailing the hardware and software setup for an automated plant or garden irrigation system managed by an ESP32.
 
-*   **[My Lights Project](my_lights/README.md):**
+*   **[My Lights Project:](my_lights/README.md)**
     *   Documentation for the `my_lights` sub-project, focusing on the control of various lighting systems (e.g., indoor, outdoor, decorative) via an ESP32.
 
-*   **[My Shopping List Project](my_shopping_list/README.md):**
-   *   Details for the `my_shopping_list` sub-project, which could involve an ESP32 interfacing with a small display to show shopping lists or other household information, potentially with app synchronization.
+*   **[My Shopping List Project:](my_shopping_list/README.md)**
+    *   Details for the `my_shopping_list` sub-project, which could involve an ESP32 interfacing with a small display to show shopping lists or other household information, potentially with app synchronization.
 
 [Back to Top](#my-yard-logo-anchor)
 

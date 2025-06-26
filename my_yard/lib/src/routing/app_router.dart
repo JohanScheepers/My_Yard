@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_yard/src/features/config/presentation/config_screen.dart';
 import 'package:my_yard/src/features/home/presentation/home_screen.dart';
 import 'package:my_yard/src/features/splash/presentation/splash_screen.dart';
 import 'package:my_yard/src/constants/ui_constants.dart';
@@ -12,7 +13,32 @@ import 'package:my_yard/src/features/settings/presentation/settings_screen.dart'
 class AppRoute {
   static const String splash = 'splash';
   static const String home = 'home';
-  static const String settings = 'settings'; // Added settings route name
+  static const String settings = 'settings';
+  static const String config = 'config';
+}
+
+/// Helper function for building a page with a custom slide transition.
+CustomTransitionPage<T> _buildPageWithSlideTransition<T>({
+  required BuildContext context,
+  required GoRouterState state,
+  required Widget child,
+}) {
+  return CustomTransitionPage<T>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      // Define the slide offset.
+      // For push: animation goes from 0.0 to 1.0 (slides in from right)
+      // For pop: animation goes from 1.0 to 0.0 (slides out to right)
+      const begin = Offset(1.0, 0.0); // Start from right
+      const end = Offset.zero; // End at current position
+      final tween = Tween(begin: begin, end: end);
+      final offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(position: offsetAnimation, child: child);
+    },
+    transitionDuration: kAnimationDurationMedium,
+  );
 }
 
 class AppRouter {
@@ -33,35 +59,29 @@ class AppRouter {
       GoRoute(
         path: '/home',
         name: AppRoute.home,
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          // Define a custom transition for the HomeScreen
-          return CustomTransitionPage<void>(
-            key: state.pageKey,
-            child: const HomeScreen(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              // Fade transition
-              return FadeTransition(opacity: animation, child: child);
-            },
-            transitionDuration: kAnimationDurationMedium, // Using constant
-          );
-        },
+        pageBuilder: (context, state) => _buildPageWithSlideTransition<void>(
+          context: context,
+          state: state,
+          child: const HomeScreen(),
+        ),
       ),
       GoRoute(
-        path: SettingsScreen
-            .routeName, // Using the static routeName from SettingsScreen
-        name: AppRoute.settings, // Using the new route name constant
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          // Define a custom transition for the SettingsScreen
-          return CustomTransitionPage<void>(
-            key: state.pageKey,
-            child: const SettingsScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            transitionDuration: kAnimationDurationMedium, // Using constant
-          );
-        },
+        path: SettingsScreen.routeName,
+        name: AppRoute.settings,
+        pageBuilder: (context, state) => _buildPageWithSlideTransition<void>(
+          context: context,
+          state: state,
+          child: const SettingsScreen(),
+        ),
+      ),
+      GoRoute(
+        path: ConfigScreen.routeName,
+        name: AppRoute.config,
+        pageBuilder: (context, state) => _buildPageWithSlideTransition<void>(
+          context: context,
+          state: state,
+          child: const ConfigScreen(),
+        ),
       ),
     ],
   );
