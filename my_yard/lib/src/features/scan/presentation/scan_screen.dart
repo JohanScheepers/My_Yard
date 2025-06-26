@@ -8,9 +8,10 @@ import 'package:my_yard/src/constants/ui_constants.dart';
 import 'package:my_yard/src/features/scan/presentation/widgets/add_device_dialog.dart';
 import 'package:my_yard/src/features/scan/presentation/widgets/connecting_device_dialog.dart';
 import 'package:my_yard/src/features/scan/presentation/widgets/error_dialog.dart';
-import 'package:my_yard/src/features/scan/presentation/widgets/scan_controls.dart';
-import 'package:my_yard/src/features/scan/presentation/widgets/scan_progress_card.dart';
-import 'package:my_yard/src/features/scan/presentation/widgets/scan_results_list.dart';
+
+import 'package:my_yard/src/features/scan/presentation/widgets/scan_narrow_layout.dart';
+import 'package:my_yard/src/features/scan/presentation/widgets/scan_wide_layout.dart';
+
 import 'package:my_yard/src/features/device/domain/device.dart'; // Added for Device model
 import 'package:my_yard/src/features/scan/application/scan_service.dart';
 
@@ -42,128 +43,45 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
         !(scanAsyncValue.isLoading && !isScanActive);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Network Scan'),
-      ),
+      
       body: LayoutBuilder(
         builder: (context, constraints) {
+          Widget currentLayout;
+          Key layoutKey;
           if (constraints.maxWidth > kMobileBreakpointMax) {
-            return _buildWideLayout(context, textTheme, scanState,
-                scanAsyncValue, isScanActive, isButtonEnabled);
+            currentLayout = ScanWideLayout(
+              textTheme: textTheme,
+              scanState: scanState,
+              scanAsyncValue: scanAsyncValue,
+              isScanActive: isScanActive,
+              isButtonEnabled: isButtonEnabled,
+              onDeviceTap: _onDeviceTap,
+            );
+            layoutKey = const ValueKey('wideLayout');
           } else {
-            return _buildNarrowLayout(context, textTheme, scanState,
-                scanAsyncValue, isScanActive, isButtonEnabled);
+            currentLayout = ScanNarrowLayout(
+              textTheme: textTheme,
+              scanState: scanState,
+              scanAsyncValue: scanAsyncValue,
+              isScanActive: isScanActive,
+              isButtonEnabled: isButtonEnabled,
+              onDeviceTap: _onDeviceTap,
+            );
+            layoutKey = const ValueKey('narrowLayout');
           }
-        },
-      ),
-    );
-  }
-
-  /// Builds the layout for narrow screens (e.g., mobile phones).
-  Widget _buildNarrowLayout(
-      BuildContext context,
-      TextTheme textTheme,
-      ScanState scanState,
-      AsyncValue<ScanState> scanAsyncValue,
-      bool isScanActive,
-      bool isButtonEnabled) {
-    return Padding(
-      padding: kPagePadding,
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ScanControls(
-                isButtonEnabled: isButtonEnabled, isScanActive: isScanActive),
-            const SizedBox(height: kSpaceMedium),
-            ScanProgressCard(
-                textTheme: textTheme,
-                scanState: scanState,
-                isScanActive: isScanActive),
-            const SizedBox(height: kSpaceMedium),
-            Text('Found Devices', style: textTheme.titleLarge),
-            const Divider(),
-            if (scanAsyncValue.hasError && !scanAsyncValue.isLoading)
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: kSpaceMedium),
-                  child: Text(
-                    'Error: ${scanAsyncValue.error}',
-                    style: textTheme.bodyMedium
-                        ?.copyWith(color: Theme.of(context).colorScheme.error),
-                  ),
-                ),
-              ),
-            ScanResultsList(
-                results: scanState.results,
-                isShrunk: true,
-                onDeviceTap: _onDeviceTap),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Builds the layout for wide screens (e.g., tablets, desktops).
-  Widget _buildWideLayout(
-      BuildContext context,
-      TextTheme textTheme,
-      ScanState scanState,
-      AsyncValue<ScanState> scanAsyncValue,
-      bool isScanActive,
-      bool isButtonEnabled) {
-    return Padding(
-      padding: kPagePadding,
-      child: Column(
-        children: [
-          ScanControls(
-              isButtonEnabled: isButtonEnabled, isScanActive: isScanActive),
-          const SizedBox(height: kSpaceMedium),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: SingleChildScrollView(
-                    child: ScanProgressCard(
-                        textTheme: textTheme,
-                        scanState: scanState,
-                        isScanActive: isScanActive),
-                  ),
-                ),
-                const SizedBox(width: kSpaceMedium),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Found Devices', style: textTheme.titleLarge),
-                      const Divider(),
-                      if (scanAsyncValue.hasError && !scanAsyncValue.isLoading)
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: kSpaceMedium),
-                            child: Text(
-                              'Error: ${scanAsyncValue.error}',
-                              style: textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                        ),
-                      Expanded(
-                        child: ScanResultsList(
-                            results: scanState.results,
-                            isShrunk: false,
-                            onDeviceTap: _onDeviceTap),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+          // Wrap the current layout in an AnimatedSwitcher for smooth transitions
+          return AnimatedSwitcher(
+            duration:
+                kAnimationDurationLong, // Use the defined animation duration
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            child: SizedBox.expand(
+              key: layoutKey,
+              child: currentLayout,
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -184,7 +102,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
               ip); // No body needed for a GET request to the root
 
       // Dismiss the loading indicator
-      if (context.mounted) {
+      if (mounted) { // Changed from context.mounted to mounted
         Navigator.of(context).pop(); // Pop the ConnectingDeviceDialog
       }
 
@@ -193,7 +111,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
 
         // Ensure the device firmware is updated and sends a unique ID.
         if (data['id'] == null) {
-          if (context.mounted) {
+          if (mounted) { // Changed from context.mounted to mounted
             showDialog(
               context: context,
               builder: (dialogContext) => const ErrorDialog(
@@ -207,7 +125,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
 
         final device = Device.fromJson(data);
 
-        if (context.mounted) {
+        if (mounted) { // Changed from context.mounted to mounted
           showDialog(
             context: context,
             builder: (dialogContext) => AddDeviceDialog(device: device),
@@ -215,7 +133,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
         }
       } else {
         // Handle HTTP error
-        if (context.mounted) {
+        if (mounted) { // Changed from context.mounted to mounted
           showDialog(
             context: context,
             builder: (dialogContext) => ErrorDialog(
@@ -227,11 +145,11 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
     } catch (e) {
       // Dismiss the loading indicator if an error occurred before it was dismissed
       // Check mounted before accessing context for canPop and pop
-      if (context.mounted && Navigator.of(context).canPop()) {
+      if (mounted && Navigator.of(context).canPop()) { // Changed from context.mounted to mounted
         Navigator.of(context).pop();
       }
       // Handle other errors (e.g., network issues, JSON parsing errors)
-      if (context.mounted) {
+      if (mounted) { // Changed from context.mounted to mounted
         showDialog(
           context: context,
           builder: (dialogContext) => ErrorDialog(
