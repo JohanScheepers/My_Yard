@@ -31,7 +31,8 @@ class HomeDeviceListView extends ConsumerWidget {
               child: Text(
                 'No devices added yet. \n\nUse the "Scan" tab to find devices on your network.',
                 textAlign: TextAlign.center,
-                style: kAppTextTheme.bodyLarge, // Use kAppTextTheme.bodyLarge directly
+                style: kAppTextTheme
+                    .bodyLarge, // Use kAppTextTheme.bodyLarge directly
               ),
             ),
           );
@@ -41,9 +42,11 @@ class HomeDeviceListView extends ConsumerWidget {
           itemBuilder: (context, index) {
             final device = devices[index];
             return Card(
-              margin: const EdgeInsets.symmetric(horizontal: kSpaceSmall, vertical: kSpaceXSmall),
+              margin: const EdgeInsets.symmetric(
+                  horizontal: kSpaceSmall, vertical: kSpaceXSmall),
               child: ListTile(
-                title: Text('IP: ${device.ip}, Type: ${device.nodeType}'),
+                title: Text(
+                    'IP: ${device.ip}\nType: ${device.nodeType}\nID: ${device.id}'),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () {
