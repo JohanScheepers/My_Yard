@@ -3,10 +3,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_yard/src/constants/text_styles.dart'; // Import text_styles.dart
+import 'package:my_yard/src/constants/text_styles.dart';
 import 'package:my_yard/src/constants/ui_constants.dart';
+import 'package:my_yard/src/features/config/application/selected_device_provider.dart';
 import 'package:my_yard/src/features/device/application/device_list_notifier.dart';
 import 'package:my_yard/src/features/device/domain/device.dart';
+import 'package:my_yard/src/features/home/application/navigation_index_provider.dart';
 
 /// Displays a list of discovered devices or a message if no devices are added.
 ///
@@ -51,16 +53,19 @@ class HomeDeviceListView extends ConsumerWidget {
                   icon: const Icon(Icons.delete),
                   onPressed: () {
                     // Directly call the notifier to remove the device
+                    //                     // TODO: Implement navigation to device details screen
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(content: Text('Tapped on device: ${device.ip}')),
+
                     ref
                         .read(deviceListNotifierProvider.notifier)
                         .removeDevice(device.id);
                   },
                 ),
                 onTap: () {
-                  // TODO: Implement navigation to device details screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Tapped on device: ${device.ip}')),
-                  );
+                  // Set the selected device and navigate to the config screen
+                  ref.read(selectedDeviceProvider.notifier).state = device;
+                  ref.read(navigationIndexProvider.notifier).state = 2;
                 },
               ),
             );

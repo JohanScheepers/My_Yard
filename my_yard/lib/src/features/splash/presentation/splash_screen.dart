@@ -36,10 +36,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     ref.read(configListNotifierProvider);
 
     // Original delay for splash screen visibility
-    await Future.delayed(
-        const Duration(seconds: 5)); // Adjusted for quicker testing if needed
+    await Future.delayed(kAnimationDurationLong);
     if (mounted) {
-      context.goNamed(AppRoute.home);
+      context.goNamed(AppRoute.home.name);
     }
   }
 

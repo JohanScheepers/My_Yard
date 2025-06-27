@@ -2,17 +2,18 @@
 // GitHub: https://github.com/JohanScheepers/My_Yard
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:my_yard/src/constants/ui_constants.dart';
-import 'package:go_router/go_router.dart';
-import 'package:my_yard/src/features/scan/presentation/scan_screen.dart';
+import 'package:my_yard/src/features/config/application/selected_device_provider.dart';
+import 'package:my_yard/src/features/config/presentation/config_screen.dart';
+import 'package:my_yard/src/features/device/application/device_list_notifier.dart';
+import 'package:my_yard/src/features/home/application/navigation_index_provider.dart';
 import 'package:my_yard/src/features/home/presentation/widgets/home_app_bar.dart';
 import 'package:my_yard/src/features/home/presentation/widgets/home_bottom_navigation_bar.dart';
-import 'package:my_yard/src/features/home/presentation/widgets/home_navigation_rail.dart';
 import 'package:my_yard/src/features/home/presentation/widgets/home_device_list_view.dart';
-import 'package:my_yard/src/features/config/presentation/config_screen.dart'; // Import ConfigScreen
-import 'package:my_yard/src/features/home/application/navigation_index_provider.dart'; // Import navigationIndexProvider
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_yard/src/features/device/application/device_list_notifier.dart';
+import 'package:my_yard/src/features/home/presentation/widgets/home_navigation_rail.dart';
+import 'package:my_yard/src/features/scan/presentation/scan_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -50,7 +51,8 @@ class HomeScreen extends ConsumerWidget {
         currentBodyContent = const ScanScreen();
         break;
       case 2: // Config Screen
-        currentBodyContent = const ConfigScreen();
+        final selectedDevice = ref.watch(selectedDeviceProvider);
+        currentBodyContent = ConfigScreen(device: selectedDevice);
         break;
       default:
         currentBodyContent = const Center(child: Text('Unknown Screen'));

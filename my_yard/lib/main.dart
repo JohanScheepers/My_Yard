@@ -25,7 +25,7 @@ class MyApp extends ConsumerWidget { // Changed to ConsumerWidget
     final asyncThemeMode = ref.watch(themeNotifierProvider);
 
     return MaterialApp.router(
-      routerConfig: AppRouter.router,
+      routerConfig: ref.watch(goRouterProvider),
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme, // Your defined light theme
       darkTheme: AppThemes.darkTheme, // Your defined dark theme
