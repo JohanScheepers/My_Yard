@@ -1,6 +1,8 @@
 // Copyright (c) [2025] Johan Scheepers
 // GitHub: https://github.com/JohanScheepers/My_Yard
 
+// We need to add the functionality to send a request to each IP and update the device list,
+
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
